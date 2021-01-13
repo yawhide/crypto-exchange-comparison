@@ -195,14 +195,14 @@ var data = {
         {
                 type: 'E-transfer',
                 fee: i => 0,
-                min: ,
+                min: 1,
                 max: 10000,
             },
             {
                 type: 'Wire transfer',
                 fee: i => 0,
-                min: ,
-                max: ,
+                min: 10000,
+                max: 10000000,
             },
         ],
         tradingFee: i => 0.005 * i,
@@ -380,7 +380,7 @@ var data = {
             {
                 type: 'E-transfer',
                 fee: i => 0,
-                min: ?, // TODO: fix
+                min: 1,
                 max: 10000,
             },
             {
@@ -541,7 +541,7 @@ var data = {
                 type: 'Wire transfer',
                 fee: i => 0,
                 min: 125,
-                max: 10000000, // TODO: ask support for max
+                max: 10000000,
             },
             {
                 type: 'In person Canada Post',
@@ -555,13 +555,13 @@ var data = {
                 type: 'Wire transfer',
                 fee: i => 13,
                 min: 14,
-                max: , // TODO: ask support for max
+                max: 100000,
             },
             {
                 type: 'EFT',
                 fee: i => 0.0025 * i,
                 min: 125,
-                max: 10000, // TODO: ask support for max
+                max: 10000,
             }
         ],
         tradingFee: i => 0.0021 * i,
