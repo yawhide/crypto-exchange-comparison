@@ -1,0 +1,30 @@
+{
+  "name": "crypto-exchange-comparison",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "coingecko-api": "^1.0.10",
+    "koa": "^2.13.1",
+    "koa-route": "^3.2.0",
+    "koa-send": "^5.0.1",
+    "prettier": "^2.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app --ignore coin_gecko_cache.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcscrad/canadian-crypto-exchange-comparison.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mcscrad/canadian-crypto-exchange-comparison/issues"
+  },
+  "homepage": "https://github.com/mcscrad/canadian-crypto-exchange-comparison#readme"
+}

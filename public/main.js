@@ -5,9 +5,7 @@ var $coinSelect = document.querySelector("#coin-select");
 var $methodSelect = document.querySelector("#method-select");
 var $result = document.querySelector("#result");
 
-function updateResult(suffix) {
-  $result.textContext = "Result: " + suffix;
-}
+var coinGeckoCache = {};
 
 function isBuy() {
   return $buyInput.value === "buy";
@@ -30,7 +28,9 @@ function calculateFee(exchangeInfo, method) {
     method.fee(amount()) +
     exchangeInfo.tradingFee(amount()) +
     exchangeInfo.realSpread(amount()) +
-    (isBuy() ? exchangeInfo.withdrawFee[coin()] || 0 : 0)
+    (isBuy()
+      ? exchangeInfo.withdrawFee[coin()] * coinGeckoCache[coin()] || 0
+      : 0)
   );
 }
 
@@ -104,12 +104,17 @@ function displayResults() {
     }
   });
   console.log(results);
-  // Object.keys(acceptableMethods).forEach((acceptableMethod) => {
-  //   var elem = document.createElement("option");
-  //   elem.value = acceptableMethod;
-  //   elem.text = acceptableMethod;
-  //   $result.add(elem);
-  // });
+  results
+    .sort((a, b) => a[2] - b[2])
+    .forEach((result) => {
+      var elem = document.createElement("li");
+      elem.appendChild(
+        document.createTextNode(
+          result[0] + " " + result[1] + " " + +result[2].toFixed(2)
+        )
+      );
+      $result.append(elem);
+    });
 }
 
 function sync() {
@@ -119,16 +124,29 @@ function sync() {
   displayResults();
 }
 
-$buyInput.onclick = function (e) {};
+$buyInput.onclick = function (e) {
+  sync();
+};
 
-$sellInput.onclick = function (e) {};
+$sellInput.onclick = function (e) {
+  sync();
+};
 
 $amountInput.onchange = function (e) {
   sync();
 };
 
-$coinSelect.onblur = function (e) {};
+$coinSelect.onchange = function (e) {
+  sync();
+};
 
-$methodSelect.onblur = function (e) {};
+$methodSelect.onchange = function (e) {
+  sync();
+};
 
-sync();
+fetch("/coingecko-cache.json")
+  .then((response) => response.json())
+  .then((data) => {
+    coinGeckoCache = data;
+    sync();
+  });
