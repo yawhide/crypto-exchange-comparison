@@ -4,11 +4,13 @@ var $amountInput = document.querySelector("#amount");
 var $coinSelect = document.querySelector("#coin-select");
 var $methodSelect = document.querySelector("#method-select");
 var $result = document.querySelector("#result");
+var $coingeckoLastUpdated = document.querySelector("#coin-gecko-last-updated");
 
 var coinGeckoCache = {};
+var state = {};
 
 function isBuy() {
-  return $buyInput.value === "buy";
+  return document.querySelector('input[name="type"]:checked').value === "buy";
 }
 
 function amount() {
@@ -47,7 +49,6 @@ function syncCoinOptionElements() {
 }
 
 function syncMethodOptionElements() {
-  // TODO: keep focus on prev elem
   var last;
   while ((last = $methodSelect.lastChild)) $methodSelect.removeChild(last);
   var acceptableMethods = {};
@@ -63,9 +64,11 @@ function syncMethodOptionElements() {
         .forEach((method) => (acceptableMethods[method.type] = true));
     }
   });
-  console.log(acceptableMethods);
   Object.keys(acceptableMethods).forEach((acceptableMethod) => {
     var elem = document.createElement("option");
+    if (acceptableMethod === state.methodType) {
+      elem.selected = true;
+    }
     elem.value = acceptableMethod;
     elem.text = acceptableMethod;
     $methodSelect.add(elem);
@@ -79,74 +82,72 @@ function displayResults() {
   var results = [];
   Object.keys(DATA).forEach((exchangeName) => {
     var exchangeInfo = DATA[exchangeName];
-    if (isBuy()) {
-      exchangeInfo.depositMethods
-        .filter((method) => amount() >= method.min && amount() <= method.max)
-        .filter((method) => transferMethod() === method.type)
-        .forEach((method) => {
-          return results.push([
-            exchangeName,
-            method.type,
-            calculateFee(exchangeInfo, method),
-          ]);
-        });
-    } else {
-      exchangeInfo.withdrawMethods
-        .filter((method) => amount() >= method.min && amount() <= method.max)
-        .filter((method) => transferMethod() === method.type)
-        .forEach((method) => {
-          return results.push([
-            exchangeName,
-            method.type,
-            calculateFee(exchangeInfo, method),
-          ]);
-        });
-    }
+    methods = isBuy()
+      ? exchangeInfo.depositMethods
+      : exchangeInfo.withdrawMethods;
+    methods
+      .filter((method) => amount() >= method.min && amount() <= method.max)
+      .filter((method) => transferMethod() === method.type)
+      .forEach((method) => {
+        return results.push([
+          exchangeName,
+          method.type,
+          calculateFee(exchangeInfo, method),
+        ]);
+      });
   });
-  console.log(results);
   results
     .sort((a, b) => a[2] - b[2])
     .forEach((result) => {
       var elem = document.createElement("li");
-      elem.appendChild(
-        document.createTextNode(
-          result[0] + " " + result[1] + " " + +result[2].toFixed(2)
-        )
+      var textNode = document.createTextNode(
+        result[0] + " " + result[1] + " " + +result[2].toFixed(2)
       );
+      elem.appendChild(textNode);
       $result.append(elem);
     });
 }
 
 function sync() {
   if (!amount) return;
-  syncCoinOptionElements();
-  syncMethodOptionElements();
   displayResults();
 }
 
 $buyInput.onclick = function (e) {
+  state.buy = true;
+  syncMethodOptionElements();
   sync();
 };
 
 $sellInput.onclick = function (e) {
+  state.buy = false;
+  syncMethodOptionElements();
   sync();
 };
 
 $amountInput.onchange = function (e) {
+  state.amount = e.target.value;
+  syncMethodOptionElements();
   sync();
 };
 
 $coinSelect.onchange = function (e) {
+  state.coin = e.target.value;
   sync();
 };
 
 $methodSelect.onchange = function (e) {
+  state.methodType = e.target.value;
   sync();
 };
+
+syncCoinOptionElements();
+syncMethodOptionElements();
 
 fetch("/coingecko-cache.json")
   .then((response) => response.json())
   .then((data) => {
     coinGeckoCache = data;
+    $coingeckoLastUpdated.textContent = "Coin data last updated " + new Date();
     sync();
   });
