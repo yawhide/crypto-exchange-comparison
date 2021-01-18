@@ -10,8 +10,8 @@ var DATA = {
       {
         type: "Wire transfer",
         fee: (i) => 0,
-        min: 10, // TODO: figure out the minimum
-        max: 50000, // TODO: figure out the maximum
+        min: 10000,
+        max: 1000000,
       },
       {
         type: "EFT",
@@ -30,8 +30,8 @@ var DATA = {
       {
         type: "Wire transfer",
         fee: (i) => (i < 10000 ? 50 : 0),
-        min: 10, // TODO: figure out the minimum
-        max: 50000,
+        min: 10000,
+        max: 1000000,
       },
       {
         type: "EFT",
@@ -608,14 +608,14 @@ var DATA = {
       {
         type: "E-transfer",
         fee: (i) => 0,
-        min: 1, // TODO:
+        min: 10, // 0.0001 btc
         max: 10000,
       },
       {
         type: "Wire transfer",
         fee: (i) => 0,
-        min: 1, // TODO:
-        max: 10000,
+        min: 10, // 0.0001 btc
+        max: 10000000,
       },
     ],
     withdrawMethods: [
@@ -628,8 +628,8 @@ var DATA = {
       {
         type: "Wire transfer",
         fee: (i) => 0,
-        min: 1, // TODO: ask support for min/max
-        max: 1, // TODO:
+        min: 10, // 0.0001 btc
+        max: 10000000,
       },
     ],
     tradingFee: (i) => 0,

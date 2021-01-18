@@ -1,1 +1,1 @@
-# canadian-crypto-exchange-comparison
+# crypto-exchange-comparison

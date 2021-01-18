@@ -3,8 +3,9 @@ var $sellInput = document.querySelector("#sell");
 var $amountInput = document.querySelector("#amount");
 var $coinSelect = document.querySelector("#coin-select");
 var $methodSelect = document.querySelector("#method-select");
-var $result = document.querySelector("#result");
+var $result = document.querySelector("#table-tbody");
 var $coingeckoLastUpdated = document.querySelector("#coin-gecko-last-updated");
+var $resultTable = document.querySelector("#result-table");
 
 var coinGeckoCache = {};
 var state = {};
@@ -76,7 +77,6 @@ function syncMethodOptionElements() {
 }
 
 function displayResults() {
-  // TODO: keep focus on prev elem
   var last;
   while ((last = $result.lastChild)) $result.removeChild(last);
   var results = [];
@@ -99,11 +99,16 @@ function displayResults() {
   results
     .sort((a, b) => a[2] - b[2])
     .forEach((result) => {
-      var elem = document.createElement("li");
-      var textNode = document.createTextNode(
-        result[0] + " " + result[1] + " " + +result[2].toFixed(2)
-      );
-      elem.appendChild(textNode);
+      var elem = document.createElement("tr");
+      elem.class = "active";
+      elem.innerHTML +=
+        "<td>" +
+        result[0] +
+        "</td><td>" +
+        result[1] +
+        "</td><td>" +
+        +result[2].toFixed(2) +
+        "</td>";
       $result.append(elem);
     });
 }
@@ -111,6 +116,10 @@ function displayResults() {
 function sync() {
   if (!amount) return;
   displayResults();
+  if (coin() && transferMethod()) {
+    $resultTable.classList.remove("d-invisible");
+    $resultTable.classList.add("d-visible");
+  }
 }
 
 $buyInput.onclick = function (e) {
@@ -125,7 +134,7 @@ $sellInput.onclick = function (e) {
   sync();
 };
 
-$amountInput.onchange = function (e) {
+$amountInput.oninput = function (e) {
   state.amount = e.target.value;
   syncMethodOptionElements();
   sync();
@@ -148,6 +157,10 @@ fetch("/coingecko-cache.json")
   .then((response) => response.json())
   .then((data) => {
     coinGeckoCache = data;
-    $coingeckoLastUpdated.textContent = "Coin data last updated " + new Date();
+    $coingeckoLastUpdated.innerHTML =
+      "Crypto prices last updated " +
+      '<span class="mark">' +
+      new Date() +
+      "</span>.";
     sync();
   });
