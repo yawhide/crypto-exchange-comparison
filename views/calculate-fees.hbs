@@ -1,0 +1,51 @@
+<div class="form-group">
+  <label class="form-radio form-inline">
+    <input type="radio" id="buy" name="type" checked value="buy" /><i class="form-icon"></i>
+    Buy
+  </label>
+  <label class="form-radio form-inline">
+    <input type="radio" id="sell" name="type" value="sell" /><i class="form-icon"></i>
+    Sell
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="amount">Amount to buy/sell</label>
+  <input class="form-input" type="number" id="amount" step="10" />
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="coin-select">Choose a coin:</label>
+  <select id="coin-select" class="form-select"></select>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="method-select">Choose method:</label>
+  <select id="method-select" class="form-select"></select>
+</div>
+
+<table class="table d-invisible" id="result-table">
+  <thead>
+    <tr>
+      <th>Exchange</th>
+      <th>Method</th>
+      <th>Fee ($)</th>
+      <th>Referral</th>
+    </tr>
+  </thead>
+  <tbody id="table-tbody"></tbody>
+</table>
+</div>
+<div class="footer container grid-md" id="copyright">
+  <p>
+    <a href="https://github.com/mcscrad/crypto-exchange-comparison" target="_blank">GitHub</a>
+    · Version <span class="version">1.0</span>
+  </p>
+  <p id="coin-gecko-last-updated">Loading ...</p>
+
+  <p>
+    Exchange fees and methods accurate as of
+    <span class="mark">Jan 9th, 2021</span>.
+  </p>
+</div>
+<script src="javascripts/calculate-fees.js"></script>

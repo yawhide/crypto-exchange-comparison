@@ -1,94 +1,39 @@
-const CoinGecko = require("coingecko-api");
-const fs = require("fs");
-const Koa = require("koa");
-const route = require("koa-route");
-const send = require("koa-send");
+var createError = require("http-errors");
+var express = require("express");
+var path = require("path");
+var cookieParser = require("cookie-parser");
+var logger = require("morgan");
 
-const app = new Koa();
-const CoinGeckoClient = new CoinGecko();
+var indexRouter = require("./routes/index");
 
-const COIN_GECKO_IDS = [
-  "bitcoin",
-  "ethereum",
-  "tether",
-  "polkadot",
-  "ripple",
-  "litecoin",
-  "bitcoin-cash",
-  "cardano",
-  "chainlink",
-  "stellar",
-  "binancecoin",
-  "usd-coin",
-  "monero",
-  "eos",
-  "crypto-com-chain",
-];
-const COIN_MAPPING = {
-  bitcoin: "BTC",
-  ethereum: "ETH",
-  tether: "USDT",
-  polkadot: "DOT",
-  ripple: "XRP",
-  litecoin: "LTC",
-  "bitcoin-cash": "BCH",
-  cardano: "ADA",
-  chainlink: "LINK",
-  stellar: "XLM",
-  binancecoin: "BNB",
-  "usd-coin": "USDC",
-  monero: "XMR",
-  eos: "EOS",
-  "crypto-com-chain": "EOS",
-};
-const coinPriceCache = JSON.parse(
-  fs.readFileSync("./coin_gecko_cache.json", "utf8")
-);
+var app = express();
 
-async function updateCoingeckoCacheAndDisk() {
-  let result;
-  try {
-    result = await CoinGeckoClient.simple.price({
-      ids: COIN_GECKO_IDS,
-      vs_currencies: "cad",
-    });
-    if (result.code !== 200) {
-      console.error("failed to query coingecko api.", result);
-      return setTimeout(updateCoingeckoCacheAndDisk, 10000);
-    }
-  } catch (e) {
-    console.error("error querying coingecko api.", e);
-    return setTimeout(updateCoingeckoCacheAndDisk, 10000);
-  }
+// view engine setup
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "hbs");
 
-  Object.keys(result.data).forEach((coinID) => {
-    coinPriceCache[COIN_MAPPING[coinID]] = result.data[coinID].cad;
-  });
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
-  fs.writeFile(
-    "./coin_gecko_cache.json",
-    JSON.stringify(coinPriceCache),
-    (err) => {
-      if (err) {
-        console.error("error writing coingecko cache to disk.", err);
-      }
-      setTimeout(updateCoingeckoCacheAndDisk, 10000);
-    }
-  );
-}
+app.use("/", indexRouter);
 
-setTimeout(updateCoingeckoCacheAndDisk, 10000);
-
-app.use(
-  route.get("/coingecko-cache.json", (ctx) => (ctx.body = coinPriceCache))
-);
-
-app.use(async (ctx) => {
-  await send(ctx, ctx.path, {
-    root: __dirname + "/public",
-    index: "index.html",
-  });
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
 });
 
-app.listen(3000);
-console.log("listening on port 3000");
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
+});
+
+module.exports = app;

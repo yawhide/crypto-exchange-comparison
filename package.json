@@ -1,30 +1,21 @@
 {
-  "name": "crypto-exchange-comparison",
-  "version": "0.1.0",
-  "description": "",
-  "main": "app.js",
+  "name": "canadian-crypto-exchange-comparison",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "SET DEBUG=canadian-crypto-exchange-comparison:* & nodemon ./bin/www"
+  },
   "dependencies": {
     "coingecko-api": "^1.0.10",
-    "koa": "^2.13.1",
-    "koa-route": "^3.2.0",
-    "koa-send": "^5.0.1",
-    "prettier": "^2.2.1"
+    "cookie-parser": "~1.4.5",
+    "debug": "~4.3.1",
+    "express": "~4.17.1",
+    "hbs": "^4.1.1",
+    "http-errors": "~1.8.0",
+    "morgan": "~1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app --ignore coin_gecko_cache.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mcscrad/canadian-crypto-exchange-comparison.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mcscrad/canadian-crypto-exchange-comparison/issues"
-  },
-  "homepage": "https://github.com/mcscrad/canadian-crypto-exchange-comparison#readme"
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
+  }
 }
