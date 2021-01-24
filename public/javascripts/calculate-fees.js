@@ -6,6 +6,7 @@ var $methodSelect = document.querySelector("#method-select");
 var $result = document.querySelector("#table-tbody");
 var $coingeckoLastUpdated = document.querySelector("#coin-gecko-last-updated");
 var $resultTable = document.querySelector("#result-table");
+var DATA = exchangeData.DATA;
 
 var coinGeckoCache = {};
 var state = {};

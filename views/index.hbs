@@ -1,2 +1,20 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<h3>Cheapest exchanges</h3>
+<div class="columns">
+  <div class="column col-6">Buy</div>
+  <div class="column col-6">Sell</div>
+</div>
+{{#each tiers }}
+<h5>${{this.amount}}</h5>
+<div class="columns">
+  <div class="column col-6">
+    {{#each this.deposits}}
+    <div>${{this.fee}}, {{this.exchangeInfo.name}}, {{this.method.type}}</div>
+    {{/each}}
+  </div>
+  <div class="column col-6">
+    {{#each this.withdraws}}
+    <div>${{this.fee}}, {{this.exchangeInfo.name}}, {{this.method.type}}</div>
+    {{/each}}
+  </div>
+</div>
+{{/each}}
