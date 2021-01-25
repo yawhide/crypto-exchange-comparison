@@ -1,4 +1,5 @@
 var express = require("express");
+const fs = require("fs");
 var router = express.Router();
 const coinPriceCache = require("../coingecko");
 const DATA = require("../public/javascripts/data").DATA;
@@ -10,6 +11,7 @@ router.get("/", function (req, res, next) {
       amount: i,
       ...calculateLowest3DepositsAndWithdraws(i),
     })),
+    coingeckoPriceLastUpdated: fs.statSync("./coin_gecko_cache.json").mtime,
   });
 });
 
@@ -23,10 +25,14 @@ router.get("/calculate-fees", function (req, res, next) {
 
 function calculateFee(isBuy, exchangeInfo, method, amount, coin) {
   return (
-    method.fee(amount) +
-    exchangeInfo.tradingFee(amount) +
-    exchangeInfo.realSpread(amount) +
-    (isBuy ? exchangeInfo.withdrawFee[coin] * coinPriceCache[coin] || 0 : 0)
+    ((method.fee(amount) +
+      exchangeInfo.tradingFee(amount) +
+      exchangeInfo.realSpread(amount) +
+      (isBuy
+        ? exchangeInfo.withdrawFee[coin] * coinPriceCache[coin] || 0
+        : 0)) /
+      amount) *
+    100
   );
 }
 

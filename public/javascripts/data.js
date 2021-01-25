@@ -5,7 +5,7 @@
       url: "https://newton.co",
       referral: {
         url: "https://web.newton.co/r/CPH3MB",
-        text: "25$ if you spend 100$",
+        text: "$25 if you spend $100",
       },
       depositMethods: [
         {
@@ -68,7 +68,7 @@
       url: "https://paytrie.com",
       referral: {
         url: "https://paytrie.com/?ref=vxiZrU2L9",
-        text: "20$ trading fee credit",
+        text: "$20 trading fee credit",
       },
       depositMethods: [
         {
@@ -101,7 +101,7 @@
       url: "https://shakepay.com/",
       referral: {
         url: "https://shakepay.me/r/G4W9XPF",
-        text: "30$ if you spend 100$",
+        text: "$30 if you spend $100",
       },
       depositMethods: [
         {
@@ -144,7 +144,7 @@
       url: "https://www.coinberry.com",
       referral: {
         url: "https://app.coinberry.com/invite/6e6c3019bb6",
-        text: "20$ if you spend 50$",
+        text: "$20 if you spend $50",
       },
       depositMethods: [
         {
@@ -206,7 +206,7 @@
       url: "https://netcoins.ca/",
       referral: {
         url: "https://netcoins.app/r?ac=0E9362",
-        text: "10$ if you spend 100$",
+        text: "$10 if you spend $100",
       },
       depositMethods: [
         {
@@ -258,7 +258,7 @@
       referral: {
         url:
           "https://bullbitcoin.com/signup?referralcode=f8e3d7b364cc4f61f2277f0f42c9ed06a68982ade6",
-        text: "10$ if you spend 100$",
+        text: "$10 if you spend $100",
       },
       depositMethods: [
         {
@@ -319,7 +319,7 @@
       url: "https://coinsquare.com",
       referral: {
         url: "coinsquare.com/register?r=3lBEq",
-        text: "10$ if you spend 100$",
+        text: "$10 if you spend $100",
       },
       depositMethods: [
         {
@@ -373,7 +373,7 @@
       url: "https://bitbuy.ca/",
       referral: {
         url: "https://bitbuy.ca/sign-up?c=AU95LPPS2",
-        text: "20$ if you spend 250$",
+        text: "$20 if you spend $250",
       },
       depositMethods: [
         {
@@ -426,7 +426,7 @@
       url: "https://ndax.io",
       referral: {
         url: "https://one.ndax.io/bfP6NZ",
-        text: "10$ if you spend 100$",
+        text: "$10 if you spend $100",
       },
       depositMethods: [
         {
@@ -521,7 +521,7 @@
       url: "https://www.coinsmart.com/",
       referral: {
         url: "https://crypto.coinsmart.com/register?promo=Ref-bP8kRb",
-        text: "15$ if you spend 100$",
+        text: "$15 if you spend $100",
       },
       depositMethods: [
         {
@@ -738,7 +738,7 @@
       url: "https://crypto.com/exchange/",
       referral: {
         url: "https://crypto.com/app/9pv58czacq",
-        text: "25$ if you stake 2500 CRO",
+        text: "$25 if you stake 5000 CRO",
       },
       depositMethods: [
         {

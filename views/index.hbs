@@ -1,20 +1,143 @@
 <h3>Cheapest exchanges</h3>
-<div class="columns">
-  <div class="column col-6">Buy</div>
-  <div class="column col-6">Sell</div>
+<p>Summary of the cheapest ways to buy or sell crypto using canadian dollars</p>
+<!-- form switch control -->
+{{!-- <div class="form-group">
+  <label class="form-switch" style="padding: .1rem .4rem .1rem 0rem; padding-left: 0rem;">
+    <input type="checkbox">
+    Sell
+    <i class="form-icon" style="left: auto;"></i>
+    <fff style="padding-left: 1.8rem">Buy</fff>
+  </label>
+</div> --}}
+
+
+
+<div class="form-group">
+  <label class="form-switch">
+    <input type="checkbox" checked>
+    <i class="form-icon"></i>
+    <fff>Buy</fff>
+  </label>
 </div>
-{{#each tiers }}
-<h5>${{this.amount}}</h5>
-<div class="columns">
-  <div class="column col-6">
-    {{#each this.deposits}}
-    <div>${{this.fee}}, {{this.exchangeInfo.name}}, {{this.method.type}}</div>
+
+
+<table class="table" id="result-table">
+  <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Exchange</th>
+      <th>Method</th>
+      <th>Fee</th>
+      <th>Referral</th>
+    </tr>
+  </thead>
+  {{#each tiers as |tier| }}
+  <tbody id="table-tbody">
+    {{#if @index}}
+    <tr style="height: 2.25rem;">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    {{/if}}
+    {{#each tier.deposits}}
+    <tr class="deposits">
+      <td>{{#unless @index}}${{tier.amount}}{{/unless}}</td>
+      <td class="text-capitalize">
+        <a href="{{this.exchangeInfo.url}}" target="_blank">
+          {{this.exchangeInfo.name}}
+        </a>
+      </td>
+      <td>{{this.method.type}}</td>
+      <td>{{this.fee}}%</td>
+      <td>
+        {{#if this.exchangeInfo.referral.url}}
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img"
+          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="external-link-alt">
+          <path fill="currentColor"
+            d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"
+            class=""></path>
+        </svg>
+        <a href="{{this.exchangeInfo.referral.url}}" target="_blank" style="padding-left: 0.25em;">
+          {{this.exchangeInfo.referral.text}}
+        </a>
+        {{else}}
+        {{this.exchangeInfo.referral.text}}
+        {{/if}}
+      </td>
+    </tr>
     {{/each}}
-  </div>
-  <div class="column col-6">
-    {{#each this.withdraws}}
-    <div>${{this.fee}}, {{this.exchangeInfo.name}}, {{this.method.type}}</div>
+    {{#each tier.withdraws}}
+    <tr class="withdraws d-none">
+      <td>{{#unless @index}}${{tier.amount}}{{/unless}}</td>
+      <td class="text-capitalize">
+        <a href="{{this.exchangeInfo.url}}" target="_blank">
+          {{this.exchangeInfo.name}}
+        </a>
+      </td>
+      <td>{{this.method.type}}</td>
+      <td>{{this.fee}}%</td>
+      <td>
+        {{#if this.exchangeInfo.referral.url}}
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img"
+          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="external-link-alt">
+          <path fill="currentColor"
+            d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"
+            class=""></path>
+        </svg>
+        <a href="{{this.exchangeInfo.referral.url}}" target="_blank" style="padding-left: 0.25em;">
+          {{this.exchangeInfo.referral.text}}
+        </a>
+        {{else}}
+        {{this.exchangeInfo.referral.text}}
+        {{/if}}
+      </td>
+    </tr>
     {{/each}}
-  </div>
+    {{/each}}
+  </tbody>
+</table>
+
+<script>
+  var $switch = document.querySelector('fff');
+  var $switchInput = document.querySelector('.form-switch > input');
+  var $withdrawTableRows = document.querySelectorAll('.withdraws');
+  var $depositTableRows = document.querySelectorAll('.deposits');
+  function displayWithdraws() {
+    $withdrawTableRows.forEach(elem => elem.classList.remove("d-none"));
+    $depositTableRows.forEach(elem => elem.classList.add("d-none"));
+    $switch.innerText = 'Sell';
+  }
+  function displayDeposits() {
+    $withdrawTableRows.forEach(elem => elem.classList.add("d-none"));
+    $depositTableRows.forEach(elem => elem.classList.remove("d-none"));
+    $switch.innerText = 'Buy';
+  }
+  $switchInput.onchange = function (e) {
+    if (e.srcElement.checked) {
+      displayDeposits();
+    } else {
+      displayWithdraws();
+    }
+  }
+
+  if ($switchInput.checked) {
+    displayDeposits();
+  } else {
+    displayWithdraws();
+  }
+</script>
+<div class="footer" id="copyright">
+  <p>
+    <a href="https://github.com/mcscrad/crypto-exchange-comparison" target="_blank">GitHub</a>
+    · Version <span class="version">1.0</span>
+  </p>
+  <p id="coin-gecko-last-updated">Crypto prices last updated {{coingeckoPriceLastUpdated}}</p>
+
+  <p>
+    Exchange fees and methods accurate as of
+    <span class="mark">Jan 9th, 2021</span>.
+  </p>
 </div>
-{{/each}}

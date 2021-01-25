@@ -109,7 +109,7 @@ function displayResults() {
         result[0] +
         "</a></td><td>" +
         result[1] +
-        "</td><td>" +
+        "</td><td>$" +
         +result[2].toFixed(2) +
         "</td><td>" +
         (DATA[result[0]].referral.url
