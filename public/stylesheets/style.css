@@ -14,3 +14,7 @@ a {
 .external-link-alt {
   width: 1em;
 }
+
+.navbar {
+  height: 68px;
+}
