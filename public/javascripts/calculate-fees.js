@@ -4,7 +4,6 @@ var $amountInput = document.querySelector("#amount");
 var $coinSelect = document.querySelector("#coin-select");
 var $methodSelect = document.querySelector("#method-select");
 var $result = document.querySelector("#table-tbody");
-var $coingeckoLastUpdated = document.querySelector("#coin-gecko-last-updated");
 var $resultTable = document.querySelector("#result-table");
 var DATA = exchangeData.DATA;
 
@@ -169,10 +168,5 @@ fetch("/coingecko-cache.json")
   .then((response) => response.json())
   .then((data) => {
     coinGeckoCache = data;
-    $coingeckoLastUpdated.innerHTML =
-      "Crypto prices last updated " +
-      '<span class="mark">' +
-      new Date() +
-      "</span>.";
     sync();
   });

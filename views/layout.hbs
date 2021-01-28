@@ -31,22 +31,17 @@
       </section>
       <section class="navbar-center">
         <!-- centered logo or brand -->
-        <a href="/" class="btn btn-link">Fee Summary</a>
-        <a href="/calculate-fees" class="btn btn-link">Fee calculator</a>
+        <a href="/" class="btn btn-link {{#if active.home}}underline{{/if}}">Fee Summary</a>
+        <a href="/calculate-fees" class="btn btn-link {{#if active.calculateFees}}underline{{/if}}">Fee calculator</a>
       </section>
       <section class="navbar-section">
+        <a href="/about" class="btn btn-link {{#if active.about}}underline{{/if}}">About</a>
       </section>
     </header>
     {{{body}}}
     {{!-- <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a></div> --}}
-    <p>
-      Exchange fees and methods accurate as of
-      <span class="mark">Jan 25th, 2021</span>.
-    </p>
-    <p>For more detailed information about the exchanges, see our <a
-        href="https://docs.google.com/spreadsheets/d/1HP2uWOCRUXgVHEsr9ge1rW-kGpwsxWWBe7rFovFE0Bg" target="_blank">
-        google spreadsheet.</a></p>
   </div>
+
 </body>
 
 </html>

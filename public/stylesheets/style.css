@@ -1,12 +1,3 @@
-/* body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00b7ff;
-} */
-
 .footer {
   padding-top: 50px;
 }
@@ -17,4 +8,9 @@ a {
 
 .navbar {
   height: 68px;
+}
+
+.navbar .underline.btn-link {
+  border-bottom: 2px solid;
+  border-bottom-color: #5755d9;
 }

@@ -1,8 +1,10 @@
+var cookieParser = require("cookie-parser");
 var createError = require("http-errors");
 var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
+const fs = require("fs");
+const hbs = require("hbs");
 var logger = require("morgan");
+var path = require("path");
 
 var indexRouter = require("./routes/index");
 
@@ -11,12 +13,28 @@ var app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
+hbs.registerPartials(__dirname + "/views/partials", (err) => {});
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+const routeMapping = {
+  "/": "home",
+  "/calculate-fees": "calculateFees",
+  "/about": "about",
+};
+
+app.use((req, res, next) => {
+  res.locals.coingeckoPriceLastUpdated = fs
+    .statSync("./coin_gecko_cache.json")
+    .mtime.toISOString();
+  console.log(req.path);
+  res.locals.active = { [routeMapping[req.path]]: true };
+  next();
+});
 
 app.use("/", indexRouter);
 

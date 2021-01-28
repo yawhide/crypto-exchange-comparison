@@ -1,0 +1,24 @@
+<div class="footer" id="copyright">
+  <p>
+    <a href="https://github.com/mcscrad/crypto-exchange-comparison" target="_blank">GitHub</a>
+    · Version <span class="version">1.0</span>
+  </p>
+  <p id="coin-gecko-last-updated"></p>
+  <p>
+    Exchange fees and methods accurate as of
+    <span class="mark">Jan 25th, 2021</span>.
+  </p>
+  <p>For more detailed information about the exchanges, see our <a
+      href="https://docs.google.com/spreadsheets/d/1HP2uWOCRUXgVHEsr9ge1rW-kGpwsxWWBe7rFovFE0Bg" target="_blank">
+      google spreadsheet.</a></p>
+</div>
+<script>
+  var $coinGeckoLastUpdatedElement = document.querySelector(
+    "#coin-gecko-last-updated"
+  );
+
+  if ($coinGeckoLastUpdatedElement) {
+    $coinGeckoLastUpdatedElement.innerText =
+      "Crypto prices last updated " + new Date('{{coingeckoPriceLastUpdated}}');
+  }
+</script>
