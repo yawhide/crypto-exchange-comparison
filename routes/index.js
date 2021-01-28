@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const coinPriceCache = require("../coingecko");
+const coinPriceCache = require("../lib/coingecko").coinPriceCache;
 const calculateLowest3DepositsAndWithdraws = require("../lib/calculateFees")
   .calculateLowest3DepositsAndWithdraws;
 

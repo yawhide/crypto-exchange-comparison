@@ -1,14 +1,15 @@
-var cookieParser = require("cookie-parser");
-var createError = require("http-errors");
-var express = require("express");
+const coingecko = require("./lib/coingecko");
+const cookieParser = require("cookie-parser");
+const createError = require("http-errors");
+const express = require("express");
 const fs = require("fs");
 const hbs = require("hbs");
-var logger = require("morgan");
-var path = require("path");
+const logger = require("morgan");
+const path = require("path");
 
-var indexRouter = require("./routes/index");
+const indexRouter = require("./routes/index");
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -28,10 +29,7 @@ const routeMapping = {
 };
 
 app.use((req, res, next) => {
-  res.locals.coingeckoPriceLastUpdated = fs
-    .statSync("./coin_gecko_cache.json")
-    .mtime.toISOString();
-  console.log(req.path);
+  res.locals.coingeckoPriceLastUpdated = coingecko.getCoinPriceCacheLastUpdatedAt();
   res.locals.active = { [routeMapping[req.path]]: true };
   next();
 });
