@@ -2,19 +2,29 @@
 <html>
 
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description"
+    content="Unbiased comparison of crypto exchanges usable by Canadians. Calculate fees for buying and selling bitcoin and ethereum.">
+  <title>
+    {{#if active.home}}
+    Crypto Rationale - Cheapest Crypto Exchanges
+    {{else if active.calculateFees}}
+    Crypto Rationale - Crypto Exchange Fee Calculator
+    {{else if active.about}}
+    Crypto Rationale - About
+    {{else}}
+    Crypto Rationale - Cheapest Crypto Exchanges
+    {{/if}}
+  </title>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTX9VQ5PCC"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
-    gtag('config', 'G-TTX9VQ5PCC');
+    gtag('config', 'G-TTX9VQ5PCC', { cookie_flags: 'SameSite=None;Secure', cookie_domain: 'cryptorationale.com', anonymize_ip: true });
   </script>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="description"
-    content="Unbiased comparison of crypto exchanges usable by Canadians. Calculate fees for buying and selling bitcoin and ethereum.">
-  <title>Crypto Rationale</title>
   <link rel='stylesheet' href='stylesheets/style.css' />
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css" />
