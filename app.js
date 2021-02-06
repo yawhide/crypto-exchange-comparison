@@ -8,6 +8,7 @@ const logger = require("morgan");
 const path = require("path");
 
 const indexRouter = require("./routes/index");
+const exchangeRouter = require("./routes/exchange");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", indexRouter);
+app.use("/exchange", exchangeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

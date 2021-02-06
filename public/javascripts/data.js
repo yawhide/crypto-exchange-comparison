@@ -62,6 +62,13 @@
         USDC: true,
         QCAD: true,
       },
+      kyc: {
+        documents: "Bank account, selfie, utility bill and photo ID",
+        processing: "Instant or 2-4 business days",
+      },
+      support: {
+        responseTime: "Days (took 2 and 8 business days personally)",
+      },
     },
     "Paytrie + Binance": {
       name: "Paytrie + Binance",
@@ -75,7 +82,7 @@
           type: "E-transfer",
           fee: (i) => 0,
           min: 100,
-          max: 2000,
+          max: 2500,
         },
       ],
       withdrawMethods: [
@@ -86,7 +93,7 @@
           max: 5000,
         },
       ],
-      tradingFee: (i) => 0.001 * i + (i < 500 ? 5 : 0.01 * i),
+      tradingFee: (i) => 0.001 * i + Math.max(5, i * 0.006),
       realSpread: (i) => 0,
       withdrawFee: {
         BTC: 0.0005,
@@ -94,6 +101,13 @@
       },
       coins: {
         LOTS: true,
+      },
+      kyc: {
+        documents: "Soft credit check and/or 2 pieces of photo ID",
+        processing: "Instant or 1 business day",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
     shakepay: {
@@ -137,6 +151,13 @@
       coins: {
         BTC: true,
         ETH: true,
+      },
+      kyc: {
+        documents: "Soft credit check and/or selfie and photo ID",
+        processing: "Instant or 2 business days",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
     coinberry: {
@@ -200,6 +221,14 @@
         LTC: true,
         XLM: true,
       },
+      kyc: {
+        documents:
+          "Soft credit check and/or selfie, photo ID and proof of residence",
+        processing: "1 business day",
+      },
+      support: {
+        responseTime: "0-1 business days",
+      },
     },
     netcoins: {
       name: "netcoins",
@@ -250,6 +279,13 @@
         LTC: true,
         USDT: true,
         QCAD: true,
+      },
+      kyc: {
+        documents: "Photo ID, selfie and proof of residence",
+        processing: "0-1 business days",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
     "Bull bitcoin": {
@@ -313,6 +349,13 @@
       coins: {
         BTC: true,
       },
+      kyc: {
+        documents: "photo ID and proof of residence",
+        processing: "???",
+      },
+      support: {
+        responseTime: "0-1 business days",
+      },
     },
     coinsquare: {
       name: "coinsquare",
@@ -367,6 +410,13 @@
         ETC: true,
         LTC: true,
       },
+      kyc: {
+        documents: "Proof of residence and photo ID",
+        processing: "???",
+      },
+      support: {
+        responseTime: "0-1 business days",
+      },
     },
     bitbuy: {
       name: "bitbuy",
@@ -419,6 +469,14 @@
         XMR: true,
         USDC: true,
         QCAD: true,
+      },
+      kyc: {
+        documents:
+          "Photo ID, selfie, financial statement and proof of residence",
+        processing: "Instant or 1-4 business days",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
     ndax: {
@@ -480,6 +538,13 @@
         EOS: true,
         XLM: true,
       },
+      kyc: {
+        documents: "Selfie, proof of residence and photo ID",
+        processing: "1 business day",
+      },
+      support: {
+        responseTime: "0-1 business days",
+      },
     },
     mybtc: {
       name: "mybtc",
@@ -514,6 +579,13 @@
       withdrawFee: {},
       coins: {
         BTC: true,
+      },
+      kyc: {
+        documents: "photo ID, selfie and proof of residence",
+        processing: "0-1 business days",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
     coinsmart: {
@@ -576,6 +648,13 @@
         ADA: true,
         QCAD: true,
       },
+      kyc: {
+        documents: "photo ID, selfie and proof of residence",
+        processing: "0-1 business days",
+      },
+      support: {
+        responseTime: "0-1 business days",
+      },
     },
     coinbase: {
       name: "coinbase",
@@ -607,6 +686,13 @@
       },
       coins: {
         LOTS: true,
+      },
+      kyc: {
+        documents: "selfie and photo ID",
+        processing: "1 business day",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
     kraken: {
@@ -653,6 +739,13 @@
       coins: {
         LOTS: true,
       },
+      kyc: {
+        documents: "photo ID, proof of residence",
+        processing: "1 business day",
+      },
+      support: {
+        responseTime: "0-1 business days",
+      },
     },
     gemini: {
       name: "gemini",
@@ -687,6 +780,13 @@
       withdrawFee: {},
       coins: {
         LOTS: true,
+      },
+      kyc: {
+        documents: "proof of residence and photo ID",
+        processing: "Months (started Dec 15th 2020 and still pending)",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
     localbitcoins: {
@@ -732,6 +832,13 @@
       coins: {
         BTC: true,
       },
+      kyc: {
+        documents: "photo ID and proof of residence",
+        processing: "???",
+      },
+      support: {
+        responseTime: "2 business days",
+      },
     },
     "crypto.com": {
       name: "crypto.com",
@@ -764,6 +871,13 @@
       },
       coins: {
         LOTS: true,
+      },
+      kyc: {
+        documents: "Bank account, selfie, utility bill and photo id",
+        processing: "Instant or 2-4 business days",
+      },
+      support: {
+        responseTime: "0-1 business days",
       },
     },
   };

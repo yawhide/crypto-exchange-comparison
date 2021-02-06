@@ -1,119 +1,116 @@
 <h3>Cheapest exchanges</h3>
 <p>Summary of the cheapest ways to buy or sell crypto using canadian dollars</p>
-<!-- form switch control -->
-{{!-- <div class="form-group">
-  <label class="form-switch" style="padding: .1rem .4rem .1rem 0rem; padding-left: 0rem;">
-    <input type="checkbox">
-    Sell
-    <i class="form-icon" style="left: auto;"></i>
-    <fff style="padding-left: 1.8rem">Buy</fff>
-  </label>
-</div> --}}
-
-
 
 <div class="form-group">
   <label class="form-switch">
     <input type="checkbox" checked>
     <i class="form-icon"></i>
-    <fff>Buy</fff>
+    Sell / Buy
   </label>
 </div>
 
-
-<table class="table" id="result-table">
-  <thead>
-    <tr>
-      <th>Amount</th>
-      <th>Exchange</th>
-      <th>Method</th>
-      <th>Fee</th>
-      <th>Referral</th>
-    </tr>
-  </thead>
-  {{#each tiers as |tier| }}
-  <tbody id="table-tbody">
-    {{#if @index}}
-    <tr style="height: 2.25rem;">
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    {{/if}}
-    {{#each tier.deposits}}
-    <tr class="deposits">
-      <td>{{#unless @index}}${{tier.amount}}{{/unless}}</td>
-      <td class="text-capitalize">
-        <a href="{{this.exchangeInfo.url}}" target="_blank">
-          {{this.exchangeInfo.name}}
-        </a>
-      </td>
-      <td>{{this.method.type}}</td>
-      <td>{{this.fee}}%</td>
-      <td>
-        {{#if this.exchangeInfo.referral.url}}
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img"
-          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="external-link-alt">
-          <path fill="currentColor"
-            d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"
-            class=""></path>
-        </svg>
-        <a href="{{this.exchangeInfo.referral.url}}" target="_blank" style="padding-left: 0.25em;">
-          {{this.exchangeInfo.referral.text}}
-        </a>
-        {{else}}
-        {{this.exchangeInfo.referral.text}}
-        {{/if}}
-      </td>
-    </tr>
-    {{/each}}
-    {{#each tier.withdraws}}
-    <tr class="withdraws d-none">
-      <td>{{#unless @index}}${{tier.amount}}{{/unless}}</td>
-      <td class="text-capitalize">
-        <a href="{{this.exchangeInfo.url}}" target="_blank">
-          {{this.exchangeInfo.name}}
-        </a>
-      </td>
-      <td>{{this.method.type}}</td>
-      <td>{{this.fee}}%</td>
-      <td>
-        {{#if this.exchangeInfo.referral.url}}
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img"
-          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="external-link-alt">
-          <path fill="currentColor"
-            d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"
-            class=""></path>
-        </svg>
-        <a href="{{this.exchangeInfo.referral.url}}" target="_blank" style="padding-left: 0.25em;">
-          {{this.exchangeInfo.referral.text}}
-        </a>
-        {{else}}
-        {{this.exchangeInfo.referral.text}}
-        {{/if}}
-      </td>
-    </tr>
-    {{/each}}
-    {{/each}}
-  </tbody>
-</table>
+<div class="card">
+  <table class="table" id="result-table">
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th>Exchange</th>
+        <th>Method</th>
+        <th>Fee</th>
+      </tr>
+    </thead>
+    {{#each tiers as |tier| }}
+    <tbody id="table-tbody">
+      {{#if @index}}
+      <tr style="height: 2.25rem;">
+        <td class="table-hover-disable"></td>
+        <td class="table-hover-disable"></td>
+        <td class="table-hover-disable"></td>
+        <td class="table-hover-disable"></td>
+      </tr>
+      {{/if}}
+      {{#each tier.deposits}}
+      <tr class="deposits">
+        <td>
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{#unless @index}}${{tier.amount}}{{/unless}}
+          </div>
+        </td>
+        <td class="text-capitalize">
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{this.exchangeInfo.name}}
+          </div>
+        </td>
+        <td>
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{this.method.type}}
+          </div>
+        </td>
+        <td>
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{this.fee}}%
+          </div>
+        </td>
+      </tr>
+      {{/each}}
+      {{#each tier.withdraws}}
+      <tr class="withdraws d-none">
+        {{!-- <td>{{#unless @index}}${{tier.amount}}{{/unless}}</td>
+        <td class="text-capitalize">
+          <a href="{{this.exchangeInfo.url}}" target="_blank">
+            {{this.exchangeInfo.name}}
+          </a>
+        </td>
+        <td>{{this.method.type}}</td>
+        <td>{{this.fee}}%</td> --}}
+        <td>
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{#unless @index}}${{tier.amount}}{{/unless}}
+          </div>
+        </td>
+        <td class="text-capitalize">
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{this.exchangeInfo.name}}
+          </div>
+        </td>
+        <td>
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{this.method.type}}
+          </div>
+        </td>
+        <td>
+          <div>
+            <a href="/exchange/{{this.exchangeInfo.name}}">{{this.exchangeInfo.name}}</a>
+            {{this.fee}}%
+          </div>
+        </td>
+      </tr>
+      {{/each}}
+      {{/each}}
+    </tbody>
+  </table>
+</div>
 
 <script>
-  var $switch = document.querySelector('fff');
   var $switchInput = document.querySelector('.form-switch > input');
   var $withdrawTableRows = document.querySelectorAll('.withdraws');
   var $depositTableRows = document.querySelectorAll('.deposits');
+  //var $tableRows = document.querySelectorAll('.table tbody tr');
+
   function displayWithdraws() {
     $withdrawTableRows.forEach(elem => elem.classList.remove("d-none"));
     $depositTableRows.forEach(elem => elem.classList.add("d-none"));
-    $switch.innerText = 'Sell';
   }
   function displayDeposits() {
     $withdrawTableRows.forEach(elem => elem.classList.add("d-none"));
     $depositTableRows.forEach(elem => elem.classList.remove("d-none"));
-    $switch.innerText = 'Buy';
   }
   $switchInput.onchange = function (e) {
     if (e.srcElement.checked) {
