@@ -70,6 +70,10 @@
   min-width: 100px;
 }
 
+.table-left .form-group {
+  font-weight: normal;
+}
+
 .table-right {
   flex: 1 1 51%;
   padding: 0.6rem 0.4rem 0.6rem 0;

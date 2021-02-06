@@ -3,17 +3,28 @@
 <h4>Fees</h4>
 <div class="columns no-padding-top">
   <div class="table-left" style="min-width: 100px">
-    <input type="number" class="form-input">
+    <div class="form-group">
+      <label class="form-switch">
+        <input type="checkbox" id="buysell" checked />
+        <i class="form-icon"></i> Sell / Buy
+      </label>
+      <label class="form-label" for="amount">Amount</label>
+      <input type="number" class="form-input" id="amount" step="10" min="10" value="500" />
+    </div>
   </div>
   <div class="table-right calculate-container">
-    <div class="calculate-left">Deposit fee</div>
-    <div class="calculate-right">$0.00</div>
+    <div class="buy calculate-left">FIAT Deposit fee</div>
+    <div class="buy calculate-right" id="fiat-deposit-fee">$0.00</div>
     <div class="calculate-left">Trading fee</div>
-    <div class="calculate-right">$0.00</div>
+    <div class="calculate-right" id="trading-fee">$0.00</div>
     <div class="calculate-left">Spread/Slippage fee</div>
-    <div class="calculate-right">$0.00</div>
+    <div class="calculate-right" id="spread-fee">$0.00</div>
+    <div class="buy calculate-left">Crypto withdrawal fee</div>
+    <div class="buy calculate-right" id="crypto-withdrawal-fee">$0.00</div>
+    <div class="sell calculate-left">FIAT Withdraw fee</div>
+    <div class="sell calculate-right" id="fiat-withdrawal-fee">$0.00</div>
     <div class="calculate-left">Total</div>
-    <div class="calculate-right">$0.00</div>
+    <div class="calculate-right" id="total">$0.00</div>
   </div>
 </div>
 <h4>Features</h4>
@@ -46,3 +57,67 @@
   <div class="table-left">Rule</div>
   <div class="table-right">{{referral.text}}</div>
 </div>
+
+<script>
+  $calcInput = document.querySelector("input[type='number']");
+  $buySellSwitch = document.querySelector("#buysell");
+  $fiatDepositFeeElem = document.querySelector("#fiat-deposit-fee")
+  $tradingFeeElem = document.querySelector("#trading-fee")
+  $spreadFeeElem = document.querySelector("#spread-fee")
+  $cryptoWithdrawalFeeElem = document.querySelector("#crypto-withdrawal-fee")
+  $fiatWithdrawalFeeElem = document.querySelector("#fiat-withdrawal-fee")
+  $totalElem = document.querySelector("#total");
+
+  $buyElems = document.querySelectorAll(".buy");
+  $sellElems = document.querySelectorAll(".sell");
+
+  var exchange = exchangeData.DATA["{{name}}"];
+
+  $calcInput.oninput = function (e) {
+    updateAmounts();
+  };
+
+  $buySellSwitch.onchange = function (e) {
+    syncBuySellVisibility()
+    updateAmounts();
+  };
+
+  function syncBuySellVisibility() {
+    if ($buySellSwitch.checked) {
+      $buyElems.forEach(elem => elem.classList.remove("d-none"))
+      $sellElems.forEach(elem => elem.classList.add("d-none"))
+    } else {
+      $buyElems.forEach(elem => elem.classList.add("d-none"))
+      $sellElems.forEach(elem => elem.classList.remove("d-none"))
+    }
+  }
+
+  function updateAmounts() {
+    var amount = $calcInput.value;
+    var fiatDepositFee = exchange.depositMethods.reduce((lowestFee, method) => {
+      var fee = method.fee(amount)
+      return Math.min(fee, lowestFee);
+    }, Infinity);
+    var tradingFee = exchange.tradingFee(amount);
+    var spreadFee = exchange.realSpread(amount)
+    var cryptoWithdrawalFee = exchange.withdrawFee["BTC"] || 0;
+    var fiatWithdrawalFee = exchange.withdrawMethods.reduce((lowestFee, method) => {
+      var fee = method.fee(amount)
+      return Math.min(fee, lowestFee);
+    }, Infinity);
+
+    if ($buySellSwitch.checked) {
+      $fiatDepositFeeElem.innerText = "$" + fiatDepositFee.toFixed(2);
+      $cryptoWithdrawalFeeElem.innerText = "$" + cryptoWithdrawalFee.toFixed(2);
+      $totalElem.innerText = "$" + (fiatDepositFee + tradingFee + spreadFee + cryptoWithdrawalFee).toFixed(2);
+    } else {
+      $fiatWithdrawalFeeElem.innerText = "$" + fiatWithdrawalFee.toFixed(2);
+      $totalElem.innerText = "$" + (tradingFee + spreadFee + fiatWithdrawalFee).toFixed(2);
+    }
+    $tradingFeeElem.innerText = "$" + tradingFee.toFixed(2);
+    $spreadFeeElem.innerText = "$" + spreadFee.toFixed(2);
+  }
+
+  syncBuySellVisibility();
+  updateAmounts();
+</script>
