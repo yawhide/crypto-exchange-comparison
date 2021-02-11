@@ -1,0 +1,19 @@
+{
+  "name": "crypto-exchange-comparison",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@shopify/polaris": "^6.0.1",
+    "@shopify/polaris-icons": "^4.3.0",
+    "coingecko-api": "^1.0.10",
+    "next": "10.0.6",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "swr": "^0.4.1"
+  }
+}
