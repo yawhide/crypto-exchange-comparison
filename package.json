@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@shopify/polaris": "^6.0.1",
     "@shopify/polaris-icons": "^4.3.0",
     "coingecko-api": "^1.0.10",

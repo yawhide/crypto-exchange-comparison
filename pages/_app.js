@@ -1,5 +1,4 @@
 import "@shopify/polaris/dist/styles.css";
-import "../styles/globals.css";
 import {
   AppProvider,
   FormLayout,
@@ -9,7 +8,6 @@ import {
   TextField,
   TopBar,
 } from "@shopify/polaris";
-import enTranslations from "@shopify/polaris/locales/en.json";
 import {
   CircleInformationMajor,
   ListMajor,
@@ -17,71 +15,18 @@ import {
 } from "@shopify/polaris-icons";
 import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import {
+  AppBar,
+  Button,
+  Container,
+  IconButton,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
-  const skipToContentRef = useRef(null);
-  const [mobileNavigationActive, setMobileNavigationActive] = useState(false);
-  const [modalActive, setModalActive] = useState(false);
-  const [supportSubject, setSupportSubject] = useState("");
-  const [supportMessage, setSupportMessage] = useState("");
-
-  const handleSubjectChange = useCallback(
-    (value) => setSupportSubject(value),
-    []
-  );
-  const handleMessageChange = useCallback(
-    (value) => setSupportMessage(value),
-    []
-  );
-  const toggleMobileNavigationActive = useCallback(
-    () =>
-      setMobileNavigationActive(
-        (mobileNavigationActive) => !mobileNavigationActive
-      ),
-    []
-  );
-  const toggleModalActive = useCallback(
-    () => setModalActive((modalActive) => !modalActive),
-    []
-  );
-  const topBarMarkup = (
-    <TopBar
-      showNavigationToggle
-      // userMenu={userMenuMarkup}
-      // searchField={searchFieldMarkup}
-      // searchResults={searchResultsMarkup}
-      // onSearchResultsDismiss={handleSearchResultsDismiss}
-      onNavigationToggle={toggleMobileNavigationActive}
-    />
-  );
-
-  const modalMarkup = (
-    <Modal
-      open={modalActive}
-      onClose={toggleModalActive}
-      title="Contact support"
-      primaryAction={{
-        content: "Send",
-        onAction: toggleModalActive,
-      }}
-    >
-      <Modal.Section>
-        <FormLayout>
-          <TextField
-            label="Subject"
-            value={supportSubject}
-            onChange={handleSubjectChange}
-          />
-          <TextField
-            label="Message"
-            value={supportMessage}
-            onChange={handleMessageChange}
-            multiline
-          />
-        </FormLayout>
-      </Modal.Section>
-    </Modal>
-  );
   const router = useRouter();
   const navigationMarkup = (
     <Navigation location={router.pathname}>
@@ -108,37 +53,39 @@ function MyApp({ Component, pageProps }) {
             exactMatch: true,
           },
         ]}
-        // action={{
-        //   icon: ConversationMinor,
-        //   accessibilityLabel: "Contact support",
-        //   onClick: toggleModalActive,
-        // }}
       />
     </Navigation>
   );
 
-  const theme = {
-    logo: {
-      width: 200,
-      topBarSource: "/logo.svg",
-      contextualSaveBarSource: "/logo.svg",
-      url: "https://cryptorationale.com",
-      accessibilityLabel: "Crypto Rationale",
-    },
-  };
-
   return (
-    <AppProvider i18n={enTranslations} theme={theme}>
-      <Frame
-        topBar={topBarMarkup}
-        navigation={navigationMarkup}
-        showMobileNavigation={mobileNavigationActive}
-        onNavigationDismiss={toggleMobileNavigationActive}
-        skipToContentTarget={skipToContentRef.current}
-      >
+    <>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          crossorigin="anonymous"
+        />
+      </Head>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            News
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="md">
         <Component {...pageProps} />
-      </Frame>
-    </AppProvider>
+      </Container>
+    </>
   );
 }
 
