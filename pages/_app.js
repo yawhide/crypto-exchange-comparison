@@ -1,20 +1,5 @@
-import "@shopify/polaris/dist/styles.css";
+import "fomantic-ui-css/semantic.min.css";
 import "../styles/globals.css";
-import {
-  AppProvider,
-  FormLayout,
-  Frame,
-  Modal,
-  Navigation,
-  TextField,
-  TopBar,
-} from "@shopify/polaris";
-import enTranslations from "@shopify/polaris/locales/en.json";
-import {
-  CircleInformationMajor,
-  ListMajor,
-  MonerisMajor,
-} from "@shopify/polaris-icons";
 import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
