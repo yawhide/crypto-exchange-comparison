@@ -1,8 +1,6 @@
 // import styles from "../styles/Home.module.css";
 import {
-  Avatar,
   Card,
-  Checkbox,
   DisplayText,
   Layout,
   Page,
@@ -13,18 +11,8 @@ import {
   Toast,
 } from "@shopify/polaris";
 import React, { useState } from "react";
-import useSWR from "swr";
 import { DATA } from "../public/data";
-
-function CoingeckoPriceData() {
-  const { data, error } = useSWR(`/api/coingecko-prices`);
-
-  return {
-    data: data,
-    isLoading: !error && !data,
-    isError: error,
-  };
-}
+import CoingeckoPriceData from "../src/fetch-coingeckoprices";
 
 function calculateFee(
   coinPriceCache,
@@ -181,26 +169,19 @@ function RenderResourceList(props) {
   );
 }
 
-export default function Home() {
-  const [checked, setChecked] = useState(true);
-  const checkbox = (
-    <Checkbox
-      label="Sell / Buy"
-      checked={checked}
-      onChange={() => setChecked(!checked)}
-    />
-  );
+export default function Home(props) {
+  const { buySellToggleState } = props;
   return (
-    <Page primaryAction={checkbox}>
+    <Page>
       {/* <div className={styles.container}> */}
       <DisplayText size="medium" element="h2">
         Exchanges with the lowest fees.
       </DisplayText>
-      <RenderResourceList amount={100} isBuy={checked} />
-      <RenderResourceList amount={500} isBuy={checked} />
-      <RenderResourceList amount={1000} isBuy={checked} />
-      <RenderResourceList amount={5000} isBuy={checked} />
-      <RenderResourceList amount={15000} isBuy={checked} />
+      <RenderResourceList amount={100} isBuy={buySellToggleState} />
+      <RenderResourceList amount={500} isBuy={buySellToggleState} />
+      <RenderResourceList amount={1000} isBuy={buySellToggleState} />
+      <RenderResourceList amount={5000} isBuy={buySellToggleState} />
+      <RenderResourceList amount={15000} isBuy={buySellToggleState} />
     </Page>
   );
 }

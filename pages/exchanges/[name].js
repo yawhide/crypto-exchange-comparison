@@ -1,5 +1,4 @@
 import { DATA } from "../../public/data";
-import useSWR from "swr";
 import {
   Card,
   Checkbox,
@@ -13,16 +12,7 @@ import {
 } from "@shopify/polaris";
 import React, { useState } from "react";
 import { MobileAcceptMajor, MobileCancelMajor } from "@shopify/polaris-icons";
-
-function CoingeckoPriceData() {
-  const { data, error } = useSWR(`/api/coingecko-prices`);
-
-  return {
-    data: data,
-    isLoading: !error && !data,
-    isError: error,
-  };
-}
+import CoingeckoPriceData from "../../src/fetch-coingeckoprices";
 
 function Calculator(props) {
   const { buy, exchange, amount } = props;
@@ -40,21 +30,25 @@ function Calculator(props) {
   // ) : null;
   // let action, setActive;
   // let renderErrorToast = null;
+  let toast = null;
   if (coingeckoPriceDataResponse.isError) {
+    toast = (
+      <Toast
+        content="Error fetching prices"
+        error
+        onDismiss={() => setActive((_) => false)}
+      />
+    );
   }
   if (
-    coingeckoPriceDataResponse.isLoading ||
-    coingeckoPriceDataResponse.isError
+    coingeckoPriceDataResponse.isError ||
+    coingeckoPriceDataResponse.isLoading
   ) {
     return (
       <Card sectioned>
         <SkeletonBodyText lines={2} />
         <SkeletonBodyText />
-        <Toast
-          content="Error fetching prices"
-          error
-          onDismiss={() => setActive((_) => false)}
-        />
+        {toast}
       </Card>
     );
   }

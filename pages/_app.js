@@ -1,5 +1,4 @@
 import "@shopify/polaris/dist/styles.css";
-import "../styles/globals.css";
 import {
   AppProvider,
   FormLayout,
@@ -17,6 +16,8 @@ import {
 } from "@shopify/polaris-icons";
 import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import BuySellToggle from "../components/BuySellToggle";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   const skipToContentRef = useRef(null);
@@ -44,10 +45,19 @@ function MyApp({ Component, pageProps }) {
     () => setModalActive((modalActive) => !modalActive),
     []
   );
+  const [buySellToggleState, setBuySellToggleState] = useState(true);
+
+  const userMenuMarkup = (
+    <BuySellToggle
+      buySellToggleState={buySellToggleState}
+      onChange={() => setBuySellToggleState(!buySellToggleState)}
+    />
+  );
+
   const topBarMarkup = (
     <TopBar
       showNavigationToggle
-      // userMenu={userMenuMarkup}
+      userMenu={userMenuMarkup}
       // searchField={searchFieldMarkup}
       // searchResults={searchResultsMarkup}
       // onSearchResultsDismiss={handleSearchResultsDismiss}
@@ -136,7 +146,7 @@ function MyApp({ Component, pageProps }) {
         onNavigationDismiss={toggleMobileNavigationActive}
         skipToContentTarget={skipToContentRef.current}
       >
-        <Component {...pageProps} />
+        <Component {...pageProps} buySellToggleState={buySellToggleState} />
       </Frame>
     </AppProvider>
   );

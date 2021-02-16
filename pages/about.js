@@ -2,7 +2,6 @@
 import {
   Avatar,
   Card,
-  Checkbox,
   Layout,
   Link,
   Page,
@@ -14,8 +13,6 @@ import {
   Toast,
 } from "@shopify/polaris";
 import React, { useState } from "react";
-import useSWR from "swr";
-import { DATA } from "../public/data";
 
 export default function Home() {
   return (

@@ -1,53 +1,33 @@
 // import styles from "../styles/Home.module.css";
 import {
-  Avatar,
   Card,
-  Checkbox,
   FormLayout,
   Layout,
   Page,
   ResourceItem,
   ResourceList,
   Select,
-  SkeletonBodyText,
   TextField,
   TextStyle,
-  Toast,
 } from "@shopify/polaris";
 import React, { useState } from "react";
-import useSWR from "swr";
 import { DATA } from "../public/data";
+import CoingeckoPriceData from "../src/fetch-coingeckoprices";
 
-function CoingeckoPriceData() {
-  const { data, error } = useSWR(`/api/coingecko-prices`);
-
-  return {
-    data: data,
-    isLoading: !error && !data,
-    isError: error,
-  };
-}
-
-export default function Home() {
-  const [checked, setChecked] = useState(true);
+export default function Home(props) {
+  const { buySellToggleState } = props;
   const [amountInput, setAmountInput] = useState("1000");
   const [cryptocurrency, setCryptocurrency] = useState("");
   const [methodType, setMethodType] = useState("");
-  const checkbox = (
-    <Checkbox
-      label="Sell / Buy"
-      checked={checked}
-      onChange={() => setChecked(!checked)}
-    />
-  );
   const amount = parseInt(amountInput);
-  const methodLabel = checked ? "Deposit" : "Withdrawal";
+
+  const methodLabel = buySellToggleState ? "Deposit" : "Withdrawal";
   const methodToExchangeInfoMapping =
     cryptocurrency === ""
       ? {}
       : Object.keys(DATA).reduce((accumulator, exchangeName) => {
           const exchangeInfo = DATA[exchangeName];
-          if (checked) {
+          if (buySellToggleState) {
             exchangeInfo.depositMethods
               .filter((method) => amount >= method.min && amount <= method.max)
               .forEach((method) => (accumulator[method.type] = exchangeInfo));
@@ -69,7 +49,7 @@ export default function Home() {
   ) {
     items = Object.values(DATA)
       .reduce((accumulator, exchangeInfo) => {
-        const method = checked
+        const method = buySellToggleState
           ? exchangeInfo.depositMethods.find(
               (method) => method.type === methodType
             )
@@ -83,7 +63,7 @@ export default function Home() {
             method.fee(amount) +
             exchangeInfo.tradingFee(amount) +
             exchangeInfo.realSpread(amount) +
-            (checked
+            (buySellToggleState
               ? exchangeInfo.withdrawFee[cryptocurrency] *
                   coingeckoPriceDataResponse.data.coinPriceCache[
                     cryptocurrency
@@ -100,7 +80,7 @@ export default function Home() {
   }
 
   return (
-    <Page primaryAction={checkbox}>
+    <Page>
       <FormLayout>
         <FormLayout.Group>
           <TextField
