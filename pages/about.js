@@ -1,17 +1,5 @@
 // import styles from "../styles/Home.module.css";
-import {
-  Avatar,
-  Card,
-  Layout,
-  Link,
-  Page,
-  ResourceItem,
-  ResourceList,
-  SkeletonBodyText,
-  TextContainer,
-  TextStyle,
-  Toast,
-} from "@shopify/polaris";
+import { Avatar, Page, TextContainer } from "@shopify/polaris";
 import React, { useState } from "react";
 
 export default function Home() {

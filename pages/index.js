@@ -8,7 +8,6 @@ import {
   ResourceList,
   SkeletonBodyText,
   TextStyle,
-  Toast,
 } from "@shopify/polaris";
 import React, { useState } from "react";
 import { DATA } from "../public/data";

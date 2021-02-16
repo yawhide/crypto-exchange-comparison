@@ -1,7 +1,6 @@
 import { DATA } from "../../public/data";
 import {
   Card,
-  Checkbox,
   DataTable,
   DescriptionList,
   Icon,
@@ -108,7 +107,8 @@ function Calculator(props) {
   );
 }
 
-function Exchange({ exchangeName }) {
+function Exchange(props) {
+  const { buySellToggleState, exchangeName } = props;
   const exchange = Object.assign({}, DATA[exchangeName], {
     coins: Object.keys(DATA[exchangeName].coins).join(", "),
     fiatFundingOptions: DATA[exchangeName].depositMethods
@@ -118,17 +118,11 @@ function Exchange({ exchangeName }) {
       .map((method) => method.type)
       .join(", "),
   });
-  const [checked, setChecked] = useState(true);
   const [amount, setAmount] = useState("1000");
 
   return (
     <div>
       <Page title="Fees">
-        <Checkbox
-          label="Sell / Buy"
-          checked={checked}
-          onChange={() => setChecked(!checked)}
-        />
         <TextField
           label="Amount"
           type="number"
@@ -137,7 +131,11 @@ function Exchange({ exchangeName }) {
           min="10"
           step="10"
         />
-        <Calculator amount={amount} buy={checked} exchange={exchange} />
+        <Calculator
+          amount={amount}
+          buy={buySellToggleState}
+          exchange={exchange}
+        />
       </Page>
       <Page title="Features">
         <DescriptionList
