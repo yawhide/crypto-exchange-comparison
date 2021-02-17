@@ -6,6 +6,7 @@ import {
   Modal,
   Navigation,
   TextField,
+  Toast,
   TopBar,
 } from "@shopify/polaris";
 import enTranslations from "@shopify/polaris/locales/en.json";
@@ -17,6 +18,7 @@ import {
 import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import BuySellToggle from "../components/BuySellToggle";
+import CoingeckoPriceData from "../src/fetch-coingeckoprices";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -45,12 +47,22 @@ function MyApp({ Component, pageProps }) {
     () => setModalActive((modalActive) => !modalActive),
     []
   );
-  const [buySellToggleState, setBuySellToggleState] = useState(true);
+
+  const [buySellToggleState, setBuySellToggleState] = useState(
+    typeof window !== "undefined" &&
+      localStorage.getItem("buySellToggleState") === "false"
+      ? false
+      : true
+  );
 
   const userMenuMarkup = (
     <BuySellToggle
       buySellToggleState={buySellToggleState}
-      onChange={() => setBuySellToggleState(!buySellToggleState)}
+      onChange={() => {
+        localStorage.setItem("buySellToggleState", !buySellToggleState);
+        // console.log("should have worked...", buySellToggleState);
+        return setBuySellToggleState(!buySellToggleState);
+      }}
     />
   );
 
@@ -137,6 +149,18 @@ function MyApp({ Component, pageProps }) {
     },
   };
 
+  let toast = null;
+  // const [_, setActive] = useState(true);
+  if (CoingeckoPriceData().isError) {
+    toast = (
+      <Toast
+        content="Error fetching prices"
+        error
+        // onDismiss={() => setActive((_) => false)}
+      />
+    );
+  }
+
   return (
     <AppProvider i18n={enTranslations} theme={theme}>
       <Frame
@@ -147,6 +171,7 @@ function MyApp({ Component, pageProps }) {
         skipToContentTarget={skipToContentRef.current}
       >
         <Component {...pageProps} buySellToggleState={buySellToggleState} />
+        {toast}
       </Frame>
     </AppProvider>
   );

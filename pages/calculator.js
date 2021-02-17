@@ -14,30 +14,41 @@ import React, { useState } from "react";
 import { DATA } from "../public/data";
 import CoingeckoPriceData from "../src/fetch-coingeckoprices";
 
+function methodTypeToExchangeInfoMapping(
+  cryptocurrency,
+  amount,
+  buySellToggleState
+) {
+  if (cryptocurrency === "") return {};
+  return Object.keys(DATA).reduce((accumulator, exchangeName) => {
+    const exchangeInfo = DATA[exchangeName];
+    if (buySellToggleState) {
+      exchangeInfo.depositMethods
+        .filter((method) => amount >= method.min && amount <= method.max)
+        .forEach((method) => (accumulator[method.type] = exchangeInfo));
+    } else {
+      exchangeInfo.withdrawMethods
+        .filter((method) => amount >= method.min && amount <= method.max)
+        .forEach((method) => (accumulator[method.type] = exchangeInfo));
+    }
+    return accumulator;
+  }, {});
+}
+
 export default function Home(props) {
   const { buySellToggleState } = props;
   const [amountInput, setAmountInput] = useState("1000");
   const [cryptocurrency, setCryptocurrency] = useState("");
-  const [methodType, setMethodType] = useState("");
+  const [methodType, setMethodType] = useState("select");
   const amount = parseInt(amountInput);
 
   const methodLabel = buySellToggleState ? "Deposit" : "Withdrawal";
-  const methodToExchangeInfoMapping =
-    cryptocurrency === ""
-      ? {}
-      : Object.keys(DATA).reduce((accumulator, exchangeName) => {
-          const exchangeInfo = DATA[exchangeName];
-          if (buySellToggleState) {
-            exchangeInfo.depositMethods
-              .filter((method) => amount >= method.min && amount <= method.max)
-              .forEach((method) => (accumulator[method.type] = exchangeInfo));
-          } else {
-            exchangeInfo.withdrawMethods
-              .filter((method) => amount >= method.min && amount <= method.max)
-              .forEach((method) => (accumulator[method.type] = exchangeInfo));
-          }
-          return accumulator;
-        }, {});
+  const methodTypeMapping = methodTypeToExchangeInfoMapping(
+    cryptocurrency,
+    amount,
+    buySellToggleState
+  );
+
   const coingeckoPriceDataResponse = CoingeckoPriceData();
 
   let items = [];
@@ -79,6 +90,31 @@ export default function Home(props) {
       .sort((a, b) => a.fee - b.fee);
   }
 
+  const onAmountChange = (newAmountInput) => {
+    const methodTypeFound = Object.keys(
+      methodTypeToExchangeInfoMapping(
+        cryptocurrency,
+        parseInt(newAmountInput),
+        buySellToggleState
+      )
+    ).find((type) => type === methodType);
+
+    if (!methodTypeFound) {
+      setMethodType("select");
+    }
+    return setAmountInput(newAmountInput);
+  };
+
+  const methodOptions = [
+    { label: "Select", value: "select", disabled: true },
+  ].concat(
+    Object.keys(methodTypeMapping).map((methodType) => ({
+      label: methodType,
+      value: methodType,
+      disabled: false,
+    }))
+  );
+
   return (
     <Page>
       <FormLayout>
@@ -87,7 +123,7 @@ export default function Home(props) {
             type="number"
             label="Amount to buy/sell"
             value={amountInput}
-            onChange={(newAmountInput) => setAmountInput(newAmountInput)}
+            onChange={onAmountChange}
             min="10"
             step="10"
           />
@@ -99,15 +135,12 @@ export default function Home(props) {
             onChange={(newCryptocurrency) =>
               setCryptocurrency(newCryptocurrency)
             }
-            // error={Boolean(!unit && weight)}
           />
           <Select
             label={`${methodLabel} Method`}
-            placeholder="Select"
-            options={Object.keys(methodToExchangeInfoMapping)}
+            options={methodOptions}
             value={methodType}
             onChange={(newMethodType) => setMethodType(newMethodType)}
-            // error={Boolean(!unit && weight)}
           />
         </FormLayout.Group>
       </FormLayout>
@@ -119,28 +152,9 @@ export default function Home(props) {
               items={items}
               renderItem={(item) => {
                 const { fee, method, name, url } = item;
-                // const { id, url, name, location, latestOrderUrl } = item;
-                // const media = <Avatar customer size="medium" name={name} />;
-                // const shortcutActions = latestOrderUrl
-                //   ? [
-                //       {
-                //         content: "View latest order",
-                //         accessibilityLabel: `View ${name}’s latest order`,
-                //         url: latestOrderUrl,
-                //       },
-                //     ]
-                //   : null;
-                // const name = exchangeInfo.name;
 
                 return (
-                  <ResourceItem
-                    id={name}
-                    url={url}
-                    // media={media}
-                    // accessibilityLabel={`View details for ${name}`}
-                    // shortcutActions={shortcutActions}
-                    // persistActions
-                  >
+                  <ResourceItem id={name} url={url}>
                     <div style={{ display: "flex", textAlign: "center" }}>
                       <h3
                         style={{ flex: "0 1 33%", textTransform: "capitalize" }}

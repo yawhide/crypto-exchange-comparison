@@ -7,8 +7,7 @@ export default function BuySellToggle(props) {
         <input
           type="checkbox"
           className={"checkbox"}
-          defaultChecked={buySellToggleState}
-          // checked={buySellToggleState}
+          checked={buySellToggleState}
           onChange={onChange}
         />
         <div className={"knobs"}>

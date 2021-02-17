@@ -17,8 +17,6 @@ function Calculator(props) {
   const { buy, exchange, amount } = props;
   let rows, total;
 
-  const [action, setActive] = useState(true);
-
   const coingeckoPriceDataResponse = CoingeckoPriceData();
   // console.log("error:", !!coingeckoPriceDataResponse.isError);
   // if (coingeckoPriceDataResponse.isError) {
@@ -29,16 +27,6 @@ function Calculator(props) {
   // ) : null;
   // let action, setActive;
   // let renderErrorToast = null;
-  let toast = null;
-  if (coingeckoPriceDataResponse.isError) {
-    toast = (
-      <Toast
-        content="Error fetching prices"
-        error
-        onDismiss={() => setActive((_) => false)}
-      />
-    );
-  }
   if (
     coingeckoPriceDataResponse.isError ||
     coingeckoPriceDataResponse.isLoading
@@ -47,7 +35,7 @@ function Calculator(props) {
       <Card sectioned>
         <SkeletonBodyText lines={2} />
         <SkeletonBodyText />
-        {toast}
+        {/* {toast} */}
       </Card>
     );
   }
