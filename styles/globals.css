@@ -63,7 +63,6 @@ a {
 .layer {
   width: 100%;
   background-color: #fde2e2;
-  transition: 0.3s ease all;
   z-index: 1;
 }
 
@@ -81,9 +80,14 @@ a {
   line-height: 1;
   padding: 9px 4px;
   border-radius: 2px;
-  transition: 0.3s ease all;
   box-sizing: content-box;
 }
+
+/* #button-10 .knobs:before,
+#button-10 .knobs:after,
+#button-10 .knobs span {
+  transition: 0.3s ease all;
+} */
 
 #button-10 .knobs:before {
   content: "";
