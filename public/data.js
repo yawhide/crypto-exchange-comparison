@@ -216,8 +216,12 @@
       tradingFee: (i) => 0,
       realSpread: (i) => 0.0268 * i,
       withdrawFee: {
-        BTC: 0.001,
+        BTC: 0.0003,
         ETH: 0.011,
+        LTC: 0.02,
+        XRP: 1,
+        XLM: 1,
+        BCH: 0.00002,
       },
       coins: {
         BTC: true,
@@ -236,7 +240,7 @@
         responseTime: "0-1 business days",
       },
       otc: false,
-      recurringBuy: false,
+      recurringBuy: true,
     },
     netcoins: {
       name: "Netcoins",
@@ -367,7 +371,7 @@
         responseTime: "0-1 business days",
       },
       otc: false,
-      recurringBuy: false,
+      recurringBuy: true,
     },
     coinsquare: {
       name: "Coinsquare",
@@ -541,6 +545,15 @@
       withdrawFee: {
         BTC: 0.000399,
         ETH: 0.0099,
+        LTC: 0.0499,
+        XRP: 9,
+        EOS: 1,
+        XLM: 15,
+        DOGE: 10,
+        ADA: 8,
+        LINK: 0.2,
+        USDT: 3.5,
+        DOT: 0.3,
       },
       coins: {
         BTC: true,
@@ -562,7 +575,7 @@
         responseTime: "0-1 business days",
       },
       otc: false,
-      recurringBuy: false,
+      recurringBuy: true,
     },
     mybtc: {
       name: "Mybtc",
@@ -815,7 +828,7 @@
         responseTime: "0-1 business days",
       },
       otc: false,
-      recurringBuy: false,
+      recurringBuy: true,
     },
     localbitcoins: {
       name: "Localbitcoins",
