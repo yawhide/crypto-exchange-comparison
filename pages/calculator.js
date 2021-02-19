@@ -11,6 +11,7 @@ import {
   TextStyle,
 } from "@shopify/polaris";
 import React, { useState } from "react";
+import PriceAndExchangeInfo from "../components/PriceAndExchangeInfo";
 import { DATA } from "../public/data";
 import CoingeckoPriceData from "../src/fetch-coingeckoprices";
 
@@ -58,8 +59,9 @@ export default function Home(props) {
     methodType &&
     cryptocurrency
   ) {
-    items = Object.values(DATA)
-      .reduce((accumulator, exchangeInfo) => {
+    items = Object.keys(DATA)
+      .reduce((accumulator, exchangeID) => {
+        const exchangeInfo = DATA[exchangeID];
         const method = buySellToggleState
           ? exchangeInfo.depositMethods.find(
               (method) => method.type === methodType
@@ -83,7 +85,7 @@ export default function Home(props) {
           ).toFixed(2),
           method: methodType,
           name: exchangeInfo.name,
-          url: `/exchanges/${exchangeInfo.name}`,
+          url: `/exchanges/${exchangeID}`,
         });
         return accumulator;
       }, [])
@@ -156,9 +158,7 @@ export default function Home(props) {
                 return (
                   <ResourceItem id={name} url={url}>
                     <div style={{ display: "flex", textAlign: "center" }}>
-                      <h3
-                        style={{ flex: "0 1 33%", textTransform: "capitalize" }}
-                      >
+                      <h3 style={{ flex: "0 1 33%" }}>
                         <TextStyle variation="strong">{name}</TextStyle>
                       </h3>
                       <div style={{ flex: "0 1 33%" }}>{method}</div>
@@ -171,6 +171,7 @@ export default function Home(props) {
           </Card>
         </Layout.AnnotatedSection>
       </Layout>
+      <PriceAndExchangeInfo />
     </Page>
   );
 }

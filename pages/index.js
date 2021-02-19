@@ -10,6 +10,7 @@ import {
   TextStyle,
 } from "@shopify/polaris";
 import React, { useState } from "react";
+import PriceAndExchangeInfo from "../components/PriceAndExchangeInfo";
 import { DATA } from "../public/data";
 import CoingeckoPriceData from "../src/fetch-coingeckoprices";
 
@@ -65,8 +66,8 @@ function calculateLowestFeeMethod(
 function calculateLowest3DepositsAndWithdraws(coinPriceCache, amount) {
   let deposits = [];
   let withdraws = [];
-  Object.keys(DATA).forEach((exchangeName) => {
-    const exchangeInfo = DATA[exchangeName];
+  Object.keys(DATA).forEach((exchangeID) => {
+    const exchangeInfo = DATA[exchangeID];
     const deposit = calculateLowestFeeMethod(
       coinPriceCache,
       true,
@@ -81,8 +82,10 @@ function calculateLowest3DepositsAndWithdraws(coinPriceCache, amount) {
       exchangeInfo.withdrawMethods,
       amount
     );
-    if (Object.keys(deposit).length !== 0) deposits.push(deposit);
-    if (Object.keys(withdraw).length !== 0) withdraws.push(withdraw);
+    if (Object.keys(deposit).length !== 0)
+      deposits.push({ ...deposit, exchangeID });
+    if (Object.keys(withdraw).length !== 0)
+      withdraws.push({ ...withdraw, exchangeID });
   });
   return {
     deposits: deposits.sort((a, b) => a.fee - b.fee).slice(0, 3),
@@ -115,7 +118,7 @@ function RenderResourceList(props) {
     fee: row.fee,
     method: row.method.type,
     name: row.exchangeInfo.name,
-    url: `/exchanges/${row.exchangeInfo.name}`,
+    url: `/exchanges/${row.exchangeID}`,
   }));
 
   return (
@@ -181,6 +184,7 @@ export default function Home(props) {
       <RenderResourceList amount={1000} isBuy={buySellToggleState} />
       <RenderResourceList amount={5000} isBuy={buySellToggleState} />
       <RenderResourceList amount={15000} isBuy={buySellToggleState} />
+      <PriceAndExchangeInfo />
     </Page>
   );
 }

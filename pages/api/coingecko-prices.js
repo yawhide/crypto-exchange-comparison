@@ -8,5 +8,5 @@ export default (req, res) => {
   // return res.sendStatus(401);
   res
     .status(200)
-    .json({ lastUpdateAt: getCoinPriceCacheLastUpdatedAt, coinPriceCache });
+    .json({ lastUpdatedAt: getCoinPriceCacheLastUpdatedAt, coinPriceCache });
 };

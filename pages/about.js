@@ -6,12 +6,6 @@ export default function Home() {
   return (
     <Page>
       <TextContainer spacing="loose">
-        {/* <Heading>Install the Shopify POS App</Heading>
-        <p>
-          Shopify POS is the easiest way to sell your products in person.
-          Available for iPad, iPhone, and Android.
-        </p>
-        <div style="padding-bottom: 80px;"></div> */}
         <p>
           Crypto Rationale is the best website to find unbiased exchange
           comparisons.
@@ -33,19 +27,22 @@ export default function Home() {
           >
             google spreadsheet
           </Link>
+          .
         </p>
         <p>
           We are currently focussing on exchanges which accept Canadian dollars
           but will expand into more currencies in the future.
         </p>
         <p>
-          If you have any feedback, please create a discussion on{" "}
+          If you have any feedback or want to report any inaccuracies, please
+          create a discussion on our{" "}
           <Link
             url="https://github.com/mcscrad/crypto-exchange-comparison/discussions"
             external={true}
           >
-            Github
+            discussion board
           </Link>
+          .
         </p>
       </TextContainer>
     </Page>

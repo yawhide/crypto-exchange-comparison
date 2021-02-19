@@ -3,14 +3,18 @@ import {
   Card,
   DataTable,
   DescriptionList,
+  DisplayText,
   Icon,
+  Link,
   Page,
   SkeletonBodyText,
   TextField,
+  TextStyle,
   Toast,
 } from "@shopify/polaris";
 import React, { useState } from "react";
 import { MobileAcceptMajor, MobileCancelMajor } from "@shopify/polaris-icons";
+import PriceAndExchangeInfo from "../../components/PriceAndExchangeInfo";
 import CoingeckoPriceData from "../../src/fetch-coingeckoprices";
 
 function Calculator(props) {
@@ -110,6 +114,11 @@ function Exchange(props) {
 
   return (
     <div>
+      <Page>
+        <Link url={exchange.url} external={true}>
+          <DisplayText size="large">{exchange.name}</DisplayText>
+        </Link>
+      </Page>
       <Page title="Fees">
         <TextField
           label="Amount"
@@ -123,6 +132,20 @@ function Exchange(props) {
           amount={amount}
           buy={buySellToggleState}
           exchange={exchange}
+        />
+      </Page>
+      <Page title="Referral">
+        <DescriptionList
+          items={[
+            {
+              term: "Rule",
+              description: (
+                <Link url={exchange.referral.url} external={true}>
+                  {exchange.referral.text}
+                </Link>
+              ),
+            },
+          ]}
         />
       </Page>
       <Page title="Features">
@@ -187,16 +210,7 @@ function Exchange(props) {
           ]}
         />
       </Page>
-      <Page title="Referral">
-        <DescriptionList
-          items={[
-            {
-              term: "Rule",
-              description: exchange.referral.text,
-            },
-          ]}
-        />
-      </Page>
+      <PriceAndExchangeInfo />
     </div>
   );
 }
@@ -206,10 +220,10 @@ export async function getStaticPaths() {
   // Call an external API endpoint to get posts
   // const res = await fetch("https://.../posts");
   // const posts = await res.json();
-  const exchanges = Object.values(DATA);
+  const exchangeIDs = Object.keys(DATA);
 
   // Get the paths we want to pre-render based on posts
-  const paths = exchanges.map((exchange) => `/exchanges/${exchange.name}`);
+  const paths = exchangeIDs.map((exchangeID) => `/exchanges/${exchangeID}`);
 
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.

@@ -1,7 +1,7 @@
 (function (exports) {
   var DATA = {
     newton: {
-      name: "newton",
+      name: "Newton",
       url: "https://newton.co",
       referral: {
         url: "https://web.newton.co/r/CPH3MB",
@@ -115,7 +115,7 @@
       recurringBuy: false,
     },
     shakepay: {
-      name: "shakepay",
+      name: "Shakepay",
       url: "https://shakepay.com/",
       referral: {
         url: "https://shakepay.me/r/G4W9XPF",
@@ -167,7 +167,7 @@
       recurringBuy: false,
     },
     coinberry: {
-      name: "coinberry",
+      name: "Coinberry",
       url: "https://www.coinberry.com",
       referral: {
         url: "https://app.coinberry.com/invite/6e6c3019bb6",
@@ -239,7 +239,7 @@
       recurringBuy: false,
     },
     netcoins: {
-      name: "netcoins",
+      name: "Netcoins",
       url: "https://netcoins.ca/",
       referral: {
         url: "https://netcoins.app/r?ac=0E9362",
@@ -298,8 +298,8 @@
       otc: false,
       recurringBuy: false,
     },
-    "Bull bitcoin": {
-      name: "Bull bitcoin",
+    bullbitcoin: {
+      name: "Bull Bitcoin",
       url: "https://bullbitcoin.com/",
       referral: {
         url:
@@ -370,7 +370,7 @@
       recurringBuy: false,
     },
     coinsquare: {
-      name: "coinsquare",
+      name: "Coinsquare",
       url: "https://coinsquare.com",
       referral: {
         url: "coinsquare.com/register?r=3lBEq",
@@ -433,7 +433,7 @@
       recurringBuy: false,
     },
     bitbuy: {
-      name: "bitbuy",
+      name: "Bitbuy",
       url: "https://bitbuy.ca/",
       referral: {
         url: "https://bitbuy.ca/sign-up?c=AU95LPPS2",
@@ -496,7 +496,7 @@
       recurringBuy: false,
     },
     ndax: {
-      name: "ndax",
+      name: "Ndax",
       url: "https://ndax.io",
       referral: {
         url: "https://one.ndax.io/bfP6NZ",
@@ -565,7 +565,7 @@
       recurringBuy: false,
     },
     mybtc: {
-      name: "mybtc",
+      name: "Mybtc",
       url: "https://mybtc.ca/",
       referral: {
         url: "",
@@ -609,7 +609,7 @@
       recurringBuy: false,
     },
     coinsmart: {
-      name: "coinsmart",
+      name: "Coinsmart",
       url: "https://www.coinsmart.com/",
       referral: {
         url: "https://crypto.coinsmart.com/register?promo=Ref-bP8kRb",
@@ -679,7 +679,7 @@
       recurringBuy: false,
     },
     coinbase: {
-      name: "coinbase",
+      name: "Coinbase",
       url: "",
       referral: {
         url: "",
@@ -720,7 +720,7 @@
       recurringBuy: false,
     },
     kraken: {
-      name: "kraken",
+      name: "Kraken",
       url: "https://www.kraken.com/",
       referral: {
         url: "",
@@ -774,7 +774,7 @@
       recurringBuy: false,
     },
     gemini: {
-      name: "gemini",
+      name: "Gemini",
       url: "https://www.gemini.com/",
       referral: {
         url: "",
@@ -818,7 +818,7 @@
       recurringBuy: false,
     },
     localbitcoins: {
-      name: "localbitcoins",
+      name: "Localbitcoins",
       url: "https://localbitcoins.com/",
       referral: {
         url: "",
@@ -871,7 +871,7 @@
       recurringBuy: false,
     },
     "crypto.com": {
-      name: "crypto.com",
+      name: "Crypto.com",
       url: "https://crypto.com/exchange/",
       referral: {
         url: "https://crypto.com/app/9pv58czacq",
