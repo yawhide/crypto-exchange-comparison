@@ -2,6 +2,7 @@
 import {
   Card,
   FormLayout,
+  Heading,
   Layout,
   Page,
   ResourceItem,
@@ -117,6 +118,13 @@ export default function Home(props) {
     }))
   );
 
+  const heading =
+    items.length > 0 ? (
+      <div style={{ "margin-top": "2rem", "margin-bottom": "2rem" }}>
+        <Heading element="h5">Results (cheapest to most expensive)</Heading>
+      </div>
+    ) : null;
+
   return (
     <Page>
       <FormLayout>
@@ -146,8 +154,9 @@ export default function Home(props) {
           />
         </FormLayout.Group>
       </FormLayout>
-      <Layout sectioned>
-        <Layout.AnnotatedSection title="" description="">
+      {heading}
+      <Layout>
+        <Layout.Section>
           <Card>
             <ResourceList
               resourceName={{ singular: "exchange", plural: "exchanges" }}
@@ -169,7 +178,7 @@ export default function Home(props) {
               }}
             />
           </Card>
-        </Layout.AnnotatedSection>
+        </Layout.Section>
       </Layout>
       <PriceAndExchangeInfo />
     </Page>

@@ -2,11 +2,14 @@
 import {
   Card,
   DisplayText,
+  Heading,
   Layout,
+  Link,
   Page,
   ResourceItem,
   ResourceList,
   SkeletonBodyText,
+  TextContainer,
   TextStyle,
 } from "@shopify/polaris";
 import React, { useState } from "react";
@@ -122,8 +125,11 @@ function RenderResourceList(props) {
   }));
 
   return (
-    <Layout sectioned>
-      <Layout.AnnotatedSection title={`$${amount}`} description="">
+    <Layout sectioned={true}>
+      <Layout.AnnotatedSection
+        title={`$${amount}`}
+        description={`Cheapest exchanges around the $${amount} mark.`}
+      >
         <Card>
           <ResourceList
             resourceName={{ singular: "exchange", plural: "exchanges" }}
@@ -141,9 +147,7 @@ function RenderResourceList(props) {
                   // persistActions
                 >
                   <div style={{ display: "flex", textAlign: "center" }}>
-                    <h3
-                      style={{ flex: "0 1 33%", textTransform: "capitalize" }}
-                    >
+                    <h3 style={{ flex: "0 1 33%" }}>
                       <TextStyle variation="strong">{name}</TextStyle>
                     </h3>
                     <div style={{ flex: "0 1 33%" }}>{method}</div>
@@ -161,12 +165,19 @@ function RenderResourceList(props) {
 
 export default function Home(props) {
   const { buySellToggleState } = props;
+  const method = buySellToggleState ? "funding" : "withdrawing";
+  const buySell = buySellToggleState ? "buying" : "selling";
   return (
     <Page>
-      {/* <div className={styles.container}> */}
-      <DisplayText size="medium" element="h2">
-        Exchanges with the lowest fees.
-      </DisplayText>
+      <TextContainer>
+        <Heading element="h2">Exchanges with the lowest fees.</Heading>
+        <p>
+          Quickly see which exchanges are cheapest around common price ranges.
+          We are assuming you are {buySell} Bitcoin using the cheapest {method}{" "}
+          method. For more detailed analysis, visit the{" "}
+          <Link url="/calculator">fee calculator</Link>.
+        </p>
+      </TextContainer>
       <RenderResourceList amount={100} isBuy={buySellToggleState} />
       <RenderResourceList amount={500} isBuy={buySellToggleState} />
       <RenderResourceList amount={1000} isBuy={buySellToggleState} />
