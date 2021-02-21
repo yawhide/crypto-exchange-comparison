@@ -78,7 +78,7 @@ export default function Home(props) {
             exchangeInfo.realSpread(amount) +
             (buySellToggleState
               ? exchangeInfo.withdrawFee[cryptocurrency] *
-                  coingeckoPriceDataResponse.data.coinPriceCache[
+                  coingeckoPriceDataResponse.data.coingeckoPrice.prices[
                     cryptocurrency
                   ] || 0
               : 0)

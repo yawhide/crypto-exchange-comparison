@@ -1,5 +1,6 @@
 import { DATA } from "../../public/data";
 import {
+  Banner,
   Card,
   DataTable,
   DescriptionList,
@@ -9,8 +10,6 @@ import {
   Page,
   SkeletonBodyText,
   TextField,
-  TextStyle,
-  Toast,
 } from "@shopify/polaris";
 import React, { useState } from "react";
 import { MobileAcceptMajor, MobileCancelMajor } from "@shopify/polaris-icons";
@@ -22,15 +21,6 @@ function Calculator(props) {
   let rows, total;
 
   const coingeckoPriceDataResponse = CoingeckoPriceData();
-  // console.log("error:", !!coingeckoPriceDataResponse.isError);
-  // if (coingeckoPriceDataResponse.isError) {
-  //   setActive(() => true);
-  // }
-  // const coingeckoPriceDataErrorToast = coingeckoPriceDataResponse.isError ? (
-
-  // ) : null;
-  // let action, setActive;
-  // let renderErrorToast = null;
   if (
     coingeckoPriceDataResponse.isError ||
     coingeckoPriceDataResponse.isLoading
@@ -39,7 +29,6 @@ function Calculator(props) {
       <Card sectioned>
         <SkeletonBodyText lines={2} />
         <SkeletonBodyText />
-        {/* {toast} */}
       </Card>
     );
   }
@@ -52,7 +41,7 @@ function Calculator(props) {
   const spreadFee = exchange.realSpread(amount);
   const cryptoWithdrawalFee =
     (exchange.withdrawFee["BTC"] || 0) *
-    coingeckoPriceDataResponse.data.coinPriceCache.BTC;
+    coingeckoPriceDataResponse.data.coingeckoPrice.prices.BTC;
   const fiatWithdrawalFee = exchange.withdrawMethods.reduce(
     (lowestFee, method) => {
       const fee = method.fee(amount);
@@ -112,6 +101,17 @@ function Exchange(props) {
   });
   const [amount, setAmount] = useState("1000");
 
+  const calculator =
+    exchange.withdrawMethods.length === 0 && buySellToggleState === false ? (
+      <Banner title="Withdrawals are not supported." status="warning"></Banner>
+    ) : (
+      <Calculator
+        amount={amount}
+        buy={buySellToggleState}
+        exchange={exchange}
+      />
+    );
+
   return (
     <div>
       <Page>
@@ -128,11 +128,7 @@ function Exchange(props) {
           min="10"
           step="10"
         />
-        <Calculator
-          amount={amount}
-          buy={buySellToggleState}
-          exchange={exchange}
-        />
+        {calculator}
       </Page>
       <Page title="Referral">
         <DescriptionList
@@ -217,26 +213,14 @@ function Exchange(props) {
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  // const res = await fetch("https://.../posts");
-  // const posts = await res.json();
   const exchangeIDs = Object.keys(DATA);
-
-  // Get the paths we want to pre-render based on posts
   const paths = exchangeIDs.map((exchangeID) => `/exchanges/${exchangeID}`);
 
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
   return { paths, fallback: false };
 }
 
 // This also gets called at build time
 export async function getStaticProps({ params }) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  // const res = await fetch(`https://.../posts/${params.id}`);
-  // const post = await res.json();
-  // Pass post data to the page via props
   return {
     props: {
       exchangeName: params.name,

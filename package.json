@@ -5,14 +5,16 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3003",
+    "start": "next start",
     "lint": "npx prettier --write ."
   },
   "dependencies": {
     "@shopify/polaris": "^6.0.1",
     "@shopify/polaris-icons": "^4.3.0",
+    "axios": "^0.21.1",
     "coingecko-api": "^1.0.10",
     "dayjs": "^1.10.4",
+    "lodash": "^4.17.20",
     "next": "10.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1",

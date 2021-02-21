@@ -110,7 +110,7 @@ function RenderResourceList(props) {
   }
 
   const result = calculateLowest3DepositsAndWithdraws(
-    coingeckoPriceDataResponse.data.coinPriceCache,
+    coingeckoPriceDataResponse.data.coingeckoPrice.prices,
     amount
   );
   const rows = isBuy ? result.deposits : result.withdraws;
@@ -130,18 +130,6 @@ function RenderResourceList(props) {
             items={items}
             renderItem={(item) => {
               const { fee, method, name, url } = item;
-              // const { id, url, name, location, latestOrderUrl } = item;
-              // const media = <Avatar customer size="medium" name={name} />;
-              // const shortcutActions = latestOrderUrl
-              //   ? [
-              //       {
-              //         content: "View latest order",
-              //         accessibilityLabel: `View ${name}’s latest order`,
-              //         url: latestOrderUrl,
-              //       },
-              //     ]
-              //   : null;
-              // const name = exchangeInfo.name;
 
               return (
                 <ResourceItem

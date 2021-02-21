@@ -32,3 +32,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+.env.local
+
+# cache
+coin_gecko_cache.json
+eth_gas_price.json

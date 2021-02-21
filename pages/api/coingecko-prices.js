@@ -1,12 +1,20 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import {
-  getCoinPriceCacheLastUpdatedAt,
-  coinPriceCache,
+  coingeckoPricesLastUpdatedAt,
+  coingeckoPrices,
 } from "../../lib/coingecko";
+import { ethGasPriceLastUpdatedAt, ethGasPrices } from "../../lib/ethGasPrice";
 
 export default (req, res) => {
-  // return res.sendStatus(401);
-  res
-    .status(200)
-    .json({ lastUpdatedAt: getCoinPriceCacheLastUpdatedAt, coinPriceCache });
+  const body = {
+    coingeckoPrice: {
+      lastUpdatedAt: coingeckoPricesLastUpdatedAt,
+      prices: coingeckoPrices,
+    },
+    ethGasPrice: {
+      fast: ethGasPrices.fast,
+      lastUpdatedAt: ethGasPriceLastUpdatedAt,
+    },
+  };
+  res.status(200).json(body);
 };
