@@ -1,4 +1,4 @@
-// import styles from "../styles/Home.module.css";
+import Head from "next/head";
 import {
   Card,
   FormLayout,
@@ -126,61 +126,66 @@ export default function Home(props) {
     ) : null;
 
   return (
-    <Page>
-      <FormLayout>
-        <FormLayout.Group>
-          <TextField
-            type="number"
-            label="Amount to buy/sell"
-            value={amountInput}
-            onChange={onAmountChange}
-            min="10"
-            step="10"
-          />
-          <Select
-            label="Crypto currency"
-            placeholder="Select"
-            options={["BTC", "ETH"]}
-            value={cryptocurrency}
-            onChange={(newCryptocurrency) =>
-              setCryptocurrency(newCryptocurrency)
-            }
-          />
-          <Select
-            label={`${methodLabel} Method`}
-            options={methodOptions}
-            value={methodType}
-            onChange={(newMethodType) => setMethodType(newMethodType)}
-          />
-        </FormLayout.Group>
-      </FormLayout>
-      {heading}
-      <Layout>
-        <Layout.Section>
-          <Card>
-            <ResourceList
-              resourceName={{ singular: "exchange", plural: "exchanges" }}
-              items={items}
-              renderItem={(item) => {
-                const { fee, method, name, url } = item;
-
-                return (
-                  <ResourceItem id={name} url={url}>
-                    <div style={{ display: "flex", textAlign: "center" }}>
-                      <h3 style={{ flex: "0 1 33%" }}>
-                        <TextStyle variation="strong">{name}</TextStyle>
-                      </h3>
-                      <div style={{ flex: "0 1 33%" }}>{method}</div>
-                      <div style={{ flex: "0 1 33%" }}>${fee}</div>
-                    </div>
-                  </ResourceItem>
-                );
-              }}
+    <>
+      <Head>
+        <title>Fee calculator for canadian crypto exchanges</title>
+      </Head>
+      <Page>
+        <FormLayout>
+          <FormLayout.Group>
+            <TextField
+              type="number"
+              label="Amount to buy/sell"
+              value={amountInput}
+              onChange={onAmountChange}
+              min="10"
+              step="10"
             />
-          </Card>
-        </Layout.Section>
-      </Layout>
-      <PriceAndExchangeInfo />
-    </Page>
+            <Select
+              label="Crypto currency"
+              placeholder="Select"
+              options={["BTC", "ETH"]}
+              value={cryptocurrency}
+              onChange={(newCryptocurrency) =>
+                setCryptocurrency(newCryptocurrency)
+              }
+            />
+            <Select
+              label={`${methodLabel} Method`}
+              options={methodOptions}
+              value={methodType}
+              onChange={(newMethodType) => setMethodType(newMethodType)}
+            />
+          </FormLayout.Group>
+        </FormLayout>
+        {heading}
+        <Layout>
+          <Layout.Section>
+            <Card>
+              <ResourceList
+                resourceName={{ singular: "exchange", plural: "exchanges" }}
+                items={items}
+                renderItem={(item) => {
+                  const { fee, method, name, url } = item;
+
+                  return (
+                    <ResourceItem id={name} url={url}>
+                      <div style={{ display: "flex", textAlign: "center" }}>
+                        <h3 style={{ flex: "0 1 33%" }}>
+                          <TextStyle variation="strong">{name}</TextStyle>
+                        </h3>
+                        <div style={{ flex: "0 1 33%" }}>{method}</div>
+                        <div style={{ flex: "0 1 33%" }}>${fee}</div>
+                      </div>
+                    </ResourceItem>
+                  );
+                }}
+              />
+            </Card>
+          </Layout.Section>
+        </Layout>
+        <PriceAndExchangeInfo />
+      </Page>
+    </>
   );
 }

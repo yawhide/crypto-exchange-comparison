@@ -1,4 +1,4 @@
-import { DATA } from "../../public/data";
+import Head from "next/head";
 import {
   Banner,
   Card,
@@ -6,6 +6,7 @@ import {
   DescriptionList,
   DisplayText,
   Icon,
+  Layout,
   Link,
   Page,
   SkeletonBodyText,
@@ -13,11 +14,13 @@ import {
 } from "@shopify/polaris";
 import React, { useState } from "react";
 import { MobileAcceptMajor, MobileCancelMajor } from "@shopify/polaris-icons";
+import { DATA } from "../../public/data";
 import PriceAndExchangeInfo from "../../components/PriceAndExchangeInfo";
 import CoingeckoPriceData from "../../src/fetch-coingeckoprices";
 
 function Calculator(props) {
-  const { buy, exchange, amount } = props;
+  const { buy, exchange } = props;
+  const [amount, setAmount] = useState("1000");
   let rows, total;
 
   const coingeckoPriceDataResponse = CoingeckoPriceData();
@@ -72,19 +75,33 @@ function Calculator(props) {
   }
 
   return (
-    <Card>
-      <DataTable
-        showTotalsInFooter
-        columnContentTypes={["text", "numeric"]}
-        headings={[]}
-        rows={rows}
-        totals={["", total]}
-        totalsName={{
-          singular: "Total",
-          plural: "Total",
-        }}
-      />
-    </Card>
+    <Layout>
+      <Layout.Section secondary>
+        <TextField
+          label="Amount"
+          type="number"
+          value={amount}
+          onChange={(newAmount) => setAmount(newAmount)}
+          min="10"
+          step="10"
+        />
+      </Layout.Section>
+      <Layout.Section>
+        <Card title="">
+          <DataTable
+            showTotalsInFooter
+            columnContentTypes={["text", "numeric"]}
+            headings={[]}
+            rows={rows}
+            totals={["", total]}
+            totalsName={{
+              singular: "Total",
+              plural: "Total",
+            }}
+          />
+        </Card>
+      </Layout.Section>
+    </Layout>
   );
 }
 
@@ -99,37 +116,25 @@ function Exchange(props) {
       .map((method) => method.type)
       .join(", "),
   });
-  const [amount, setAmount] = useState("1000");
 
   const calculator =
     exchange.withdrawMethods.length === 0 && buySellToggleState === false ? (
       <Banner title="Withdrawals are not supported." status="warning"></Banner>
     ) : (
-      <Calculator
-        amount={amount}
-        buy={buySellToggleState}
-        exchange={exchange}
-      />
+      <Calculator buy={buySellToggleState} exchange={exchange} />
     );
 
   return (
     <div>
+      <Head>
+        <title>{exchange.name}</title>
+      </Head>
       <Page>
         <Link url={exchange.url} external={true}>
           <DisplayText size="large">{exchange.name}</DisplayText>
         </Link>
       </Page>
-      <Page title="Fees">
-        <TextField
-          label="Amount"
-          type="number"
-          value={amount}
-          onChange={(newAmount) => setAmount(newAmount)}
-          min="10"
-          step="10"
-        />
-        {calculator}
-      </Page>
+      <Page title="Fees">{calculator}</Page>
       <Page title="Referral">
         <DescriptionList
           items={[

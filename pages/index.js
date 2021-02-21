@@ -1,4 +1,4 @@
-// import styles from "../styles/Home.module.css";
+import Head from "next/head";
 import {
   Card,
   DisplayText,
@@ -125,41 +125,43 @@ function RenderResourceList(props) {
   }));
 
   return (
-    <Layout sectioned={true}>
-      <Layout.AnnotatedSection
-        title={`$${amount}`}
-        description={`Cheapest exchanges around the $${amount} mark.`}
-      >
-        <Card>
-          <ResourceList
-            resourceName={{ singular: "exchange", plural: "exchanges" }}
-            items={items}
-            renderItem={(item) => {
-              const { fee, method, name, url } = item;
+    <Page>
+      <Layout>
+        <Layout.AnnotatedSection
+          title={`$${amount}`}
+          description={`Cheapest exchanges around the $${amount} mark.`}
+        >
+          <Card>
+            <ResourceList
+              resourceName={{ singular: "exchange", plural: "exchanges" }}
+              items={items}
+              renderItem={(item) => {
+                const { fee, method, name, url } = item;
 
-              return (
-                <ResourceItem
-                  id={name}
-                  url={url}
-                  // media={media}
-                  // accessibilityLabel={`View details for ${name}`}
-                  // shortcutActions={shortcutActions}
-                  // persistActions
-                >
-                  <div style={{ display: "flex", textAlign: "center" }}>
-                    <h3 style={{ flex: "0 1 33%" }}>
-                      <TextStyle variation="strong">{name}</TextStyle>
-                    </h3>
-                    <div style={{ flex: "0 1 33%" }}>{method}</div>
-                    <div style={{ flex: "0 1 33%" }}>{fee}%</div>
-                  </div>
-                </ResourceItem>
-              );
-            }}
-          />
-        </Card>
-      </Layout.AnnotatedSection>
-    </Layout>
+                return (
+                  <ResourceItem
+                    id={name}
+                    url={url}
+                    // media={media}
+                    // accessibilityLabel={`View details for ${name}`}
+                    // shortcutActions={shortcutActions}
+                    // persistActions
+                  >
+                    <div style={{ display: "flex", textAlign: "center" }}>
+                      <h3 style={{ flex: "0 1 33%" }}>
+                        <TextStyle variation="strong">{name}</TextStyle>
+                      </h3>
+                      <div style={{ flex: "0 1 33%" }}>{method}</div>
+                      <div style={{ flex: "0 1 33%" }}>{fee}%</div>
+                    </div>
+                  </ResourceItem>
+                );
+              }}
+            />
+          </Card>
+        </Layout.AnnotatedSection>
+      </Layout>
+    </Page>
   );
 }
 
@@ -168,22 +170,27 @@ export default function Home(props) {
   const method = buySellToggleState ? "funding" : "withdrawing";
   const buySell = buySellToggleState ? "buying" : "selling";
   return (
-    <Page>
-      <TextContainer>
-        <Heading element="h2">Exchanges with the lowest fees.</Heading>
-        <p>
-          Quickly see which exchanges are cheapest around common price ranges.
-          We are assuming you are {buySell} Bitcoin using the cheapest {method}{" "}
-          method. For more detailed analysis, visit the{" "}
-          <Link url="/calculator">fee calculator</Link>.
-        </p>
-      </TextContainer>
+    <>
+      <Head>
+        <title>Cheapest canadian crypto exchanges</title>
+      </Head>
+      <Page>
+        <TextContainer>
+          <Heading element="h2">Exchanges with the lowest fees.</Heading>
+          <p>
+            Quickly see which exchanges are cheapest around common price ranges.
+            We are assuming you are {buySell} Bitcoin using the cheapest{" "}
+            {method} method. For more detailed analysis, visit the{" "}
+            <Link url="/calculator">fee calculator</Link>.
+          </p>
+        </TextContainer>
+      </Page>
       <RenderResourceList amount={100} isBuy={buySellToggleState} />
       <RenderResourceList amount={500} isBuy={buySellToggleState} />
       <RenderResourceList amount={1000} isBuy={buySellToggleState} />
       <RenderResourceList amount={5000} isBuy={buySellToggleState} />
       <RenderResourceList amount={15000} isBuy={buySellToggleState} />
       <PriceAndExchangeInfo />
-    </Page>
+    </>
   );
 }
