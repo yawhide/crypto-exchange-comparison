@@ -72,7 +72,7 @@
       otc: false,
       recurringBuy: false,
     },
-    "Paytrie + Binance": {
+    paytriebinance: {
       name: "Paytrie + Binance",
       url: "https://paytrie.com",
       referral: {

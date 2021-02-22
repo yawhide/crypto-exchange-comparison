@@ -37,3 +37,5 @@ yarn-error.log*
 # cache
 coin_gecko_cache.json
 eth_gas_price.json
+
+public/sitemap.xml

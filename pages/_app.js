@@ -150,15 +150,8 @@ function MyApp({ Component, pageProps }) {
   };
 
   let toast = null;
-  // const [_, setActive] = useState(true);
   if (CoingeckoPriceData().isError) {
-    toast = (
-      <Toast
-        content="Error fetching prices"
-        error
-        // onDismiss={() => setActive((_) => false)}
-      />
-    );
+    toast = <Toast content="Error fetching prices" error />;
   }
 
   return (
