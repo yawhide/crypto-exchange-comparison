@@ -187,7 +187,20 @@ function Calculator(props) {
   ) {
     calculatorResult = (
       <Card sectioned>
-        <SkeletonBodyText lines={isBuy ? 4 : 3} />
+        <Card.Section>
+          <SkeletonBodyText lines={1} />
+        </Card.Section>
+        <Card.Section>
+          <SkeletonBodyText lines={1} />
+        </Card.Section>
+        <Card.Section>
+          <SkeletonBodyText lines={1} />
+        </Card.Section>
+        {isBuy ? (
+          <Card.Section>
+            <SkeletonBodyText lines={1} />
+          </Card.Section>
+        ) : null}
       </Card>
     );
   } else {
@@ -246,9 +259,11 @@ function Exchange(props) {
         <title>{exchange.name}</title>
       </Head>
       <Page>
-        <Link url={exchange.url} external={true}>
-          <DisplayText size="large">{exchange.name}</DisplayText>
-        </Link>
+        <DisplayText size="large">
+          <Link url={exchange.url} external={true}>
+            {exchange.name}
+          </Link>
+        </DisplayText>
       </Page>
       <Page title="Fees">{calculator}</Page>
       <Page title="Referral">
