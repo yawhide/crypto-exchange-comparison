@@ -9,6 +9,7 @@ import {
   Layout,
   Link,
   Page,
+  Select,
   SkeletonBodyText,
   TextField,
 } from "@shopify/polaris";
@@ -18,42 +19,112 @@ import { DATA } from "../../public/data";
 import PriceAndExchangeInfo from "../../components/PriceAndExchangeInfo";
 import CoingeckoPriceData from "../../src/fetch-coingeckoprices";
 
-function Calculator(props) {
-  const { buy, exchange } = props;
-  const [amount, setAmount] = useState("1000");
-  let rows, total;
-
-  const coingeckoPriceDataResponse = CoingeckoPriceData();
-  if (
-    coingeckoPriceDataResponse.isError ||
-    coingeckoPriceDataResponse.isLoading
-  ) {
-    return (
-      <Card sectioned>
-        <SkeletonBodyText lines={2} />
-        <SkeletonBodyText />
-      </Card>
-    );
+function methodTypeToExchangeInfoMapping(exchange, amount, isBuy) {
+  if (isBuy) {
+    return exchange.depositMethods
+      .filter((method) => amount >= method.min && amount <= method.max)
+      .reduce((accumulator, method) => {
+        accumulator[method.type] = exchange;
+        return accumulator;
+      }, {});
+  } else {
+    return exchange.withdrawMethods
+      .filter((method) => amount >= method.min && amount <= method.max)
+      .reduce((accumulator, method) => {
+        accumulator[method.type] = exchange;
+        return accumulator;
+      }, {});
   }
+}
 
-  const fiatDepositFee = exchange.depositMethods.reduce((lowestFee, method) => {
-    const fee = method.fee(amount);
-    return Math.min(fee, lowestFee);
-  }, Infinity);
+function CalculatorForm(props) {
+  const {
+    amount,
+    setAmount,
+    exchange,
+    cryptocurrency,
+    setCryptocurrency,
+    methodType,
+    setMethodType,
+    isBuy,
+  } = props;
+
+  const methodLabel = isBuy ? "Deposit" : "Withdrawal";
+  const methodTypeMapping = methodTypeToExchangeInfoMapping(
+    exchange,
+    amount,
+    isBuy
+  );
+  const methodOptions = [
+    { label: "Select", value: "select", disabled: true },
+  ].concat(
+    Object.keys(methodTypeMapping).map((methodType) => ({
+      label: methodType,
+      value: methodType,
+      disabled: false,
+    }))
+  );
+
+  const onAmountChange = (newAmount) => {
+    const methodTypeFound = Object.keys(
+      methodTypeToExchangeInfoMapping(exchange, parseInt(newAmount), isBuy)
+    ).find((type) => type === methodType);
+
+    if (!methodTypeFound) {
+      setMethodType("select");
+    }
+    return setAmount(newAmount);
+  };
+
+  return (
+    <>
+      <TextField
+        label="Amount"
+        type="number"
+        value={amount}
+        onChange={onAmountChange}
+        min="10"
+        step="10"
+      />
+      <Select
+        label="Crypto currency"
+        options={["BTC"].concat(
+          exchange.coins.ETH || exchange.coins.LOTS ? ["ETH"] : []
+        )}
+        onChange={(newCryptocurrency) => setCryptocurrency(newCryptocurrency)}
+        value={cryptocurrency}
+      />
+      <Select
+        label={`${methodLabel} Method`}
+        options={methodOptions}
+        value={methodType}
+        onChange={(newMethodType) => setMethodType(newMethodType)}
+      />
+    </>
+  );
+}
+
+function CalculatorResult(props) {
+  const {
+    methodType,
+    exchange,
+    amount,
+    cryptocurrency,
+    coingeckoPriceDataResponse,
+    isBuy,
+  } = props;
   const tradingFee = exchange.tradingFee(amount);
   const spreadFee = exchange.realSpread(amount);
   const cryptoWithdrawalFee =
-    (exchange.withdrawFee["BTC"] || 0) *
-    coingeckoPriceDataResponse.data.coingeckoPrice.prices.BTC;
-  const fiatWithdrawalFee = exchange.withdrawMethods.reduce(
-    (lowestFee, method) => {
-      const fee = method.fee(amount);
-      return Math.min(fee, lowestFee);
-    },
-    Infinity
-  );
+    (exchange.withdrawFee[cryptocurrency] || 0) *
+    coingeckoPriceDataResponse.data.coingeckoPrice.prices[cryptocurrency];
+  let rows, total;
 
-  if (buy) {
+  if (isBuy) {
+    const depositMethod = exchange.depositMethods.find(
+      (method) => method.type === methodType
+    );
+    const fiatDepositFee = depositMethod ? depositMethod.fee(amount) : 0;
     rows = [
       ["FIAT Deposit Fee", `$${fiatDepositFee.toFixed(2)}`],
       ["Trading Fee", `$${tradingFee.toFixed(2)}`],
@@ -66,6 +137,12 @@ function Calculator(props) {
         2
       );
   } else {
+    const withdrawalMethod = exchange.withdrawMethods.find(
+      (method) => method.type === methodType
+    );
+    const fiatWithdrawalFee = withdrawalMethod
+      ? withdrawalMethod.fee(amount)
+      : 0;
     rows = [
       ["Trading Fee", `$${tradingFee.toFixed(2)}`],
       ["Spread/Slippage Fee", `$${spreadFee.toFixed(2)}`],
@@ -75,32 +152,85 @@ function Calculator(props) {
   }
 
   return (
+    <>
+      <Card title="">
+        <DataTable
+          showTotalsInFooter
+          columnContentTypes={["text", "numeric"]}
+          headings={[]}
+          rows={rows}
+          totals={["", total]}
+          totalsName={{
+            singular: "Total",
+            plural: "Total",
+          }}
+        />
+      </Card>
+    </>
+  );
+}
+
+function Calculator(props) {
+  const { isBuy, exchange } = props;
+  const [amount, setAmount] = useState("1000");
+  const [cryptocurrency, setCryptocurrency] = useState("BTC");
+  const [methodType, setMethodType] = useState("select");
+
+  const coingeckoPriceDataResponse = CoingeckoPriceData();
+  let calculatorResult = null;
+  if (
+    coingeckoPriceDataResponse.isError ||
+    coingeckoPriceDataResponse.isLoading ||
+    !amount ||
+    !cryptocurrency ||
+    methodType === "select"
+  ) {
+    calculatorResult = (
+      <Card sectioned>
+        <Card.Section>
+          <SkeletonBodyText lines={1} />
+        </Card.Section>
+        <Card.Section>
+          <SkeletonBodyText lines={1} />
+        </Card.Section>
+        <Card.Section>
+          <SkeletonBodyText lines={1} />
+        </Card.Section>
+        {isBuy ? (
+          <Card.Section>
+            <SkeletonBodyText lines={1} />
+          </Card.Section>
+        ) : null}
+      </Card>
+    );
+  } else {
+    calculatorResult = (
+      <CalculatorResult
+        methodType={methodType}
+        exchange={exchange}
+        amount={amount}
+        cryptocurrency={cryptocurrency}
+        coingeckoPriceDataResponse={coingeckoPriceDataResponse}
+        isBuy={isBuy}
+      />
+    );
+  }
+
+  return (
     <Layout>
       <Layout.Section secondary>
-        <TextField
-          label="Amount"
-          type="number"
-          value={amount}
-          onChange={(newAmount) => setAmount(newAmount)}
-          min="10"
-          step="10"
+        <CalculatorForm
+          amount={amount}
+          setAmount={setAmount}
+          exchange={exchange}
+          cryptocurrency={cryptocurrency}
+          setCryptocurrency={setCryptocurrency}
+          methodType={methodType}
+          setMethodType={setMethodType}
+          isBuy={isBuy}
         />
       </Layout.Section>
-      <Layout.Section>
-        <Card title="">
-          <DataTable
-            showTotalsInFooter
-            columnContentTypes={["text", "numeric"]}
-            headings={[]}
-            rows={rows}
-            totals={["", total]}
-            totalsName={{
-              singular: "Total",
-              plural: "Total",
-            }}
-          />
-        </Card>
-      </Layout.Section>
+      <Layout.Section>{calculatorResult}</Layout.Section>
     </Layout>
   );
 }
@@ -108,7 +238,6 @@ function Calculator(props) {
 function Exchange(props) {
   const { buySellToggleState, exchangeName } = props;
   const exchange = Object.assign({}, DATA[exchangeName], {
-    coins: Object.keys(DATA[exchangeName].coins).join(", "),
     fiatFundingOptions: DATA[exchangeName].depositMethods
       .map((method) => method.type)
       .join(", "),
@@ -121,7 +250,7 @@ function Exchange(props) {
     exchange.withdrawMethods.length === 0 && buySellToggleState === false ? (
       <Banner title="Withdrawals are not supported." status="warning"></Banner>
     ) : (
-      <Calculator buy={buySellToggleState} exchange={exchange} />
+      <Calculator isBuy={buySellToggleState} exchange={exchange} />
     );
 
   return (
@@ -130,9 +259,11 @@ function Exchange(props) {
         <title>{exchange.name}</title>
       </Head>
       <Page>
-        <Link url={exchange.url} external={true}>
-          <DisplayText size="large">{exchange.name}</DisplayText>
-        </Link>
+        <DisplayText size="large">
+          <Link url={exchange.url} external={true}>
+            {exchange.name}
+          </Link>
+        </DisplayText>
       </Page>
       <Page title="Fees">{calculator}</Page>
       <Page title="Referral">
@@ -154,7 +285,7 @@ function Exchange(props) {
           items={[
             {
               term: "Coins",
-              description: exchange.coins,
+              description: Object.keys(DATA[exchangeName].coins).join(", "),
             },
             {
               term: "OTC",
