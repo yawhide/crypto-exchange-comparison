@@ -131,8 +131,7 @@ export default function Home(props) {
         <title>Fee calculator</title>
         <meta
           name="description"
-          content="Find the total fees charged by exchanges to buy crypto currency or
-          sell to canadian dollars."
+          content="Find the total fees charged by exchanges to buy crypto currency or sell to canadian dollars."
         ></meta>
       </Head>
       <Page>
