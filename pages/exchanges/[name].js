@@ -257,6 +257,10 @@ function Exchange(props) {
     <div>
       <Head>
         <title>{exchange.name}</title>
+        <meta
+          name="description"
+          content={`Find detailed information about ${exchange.name} such as referral bonuses, fee calculator, KYC, support response times and much more.`}
+        ></meta>
       </Head>
       <Page>
         <DisplayText size="large">

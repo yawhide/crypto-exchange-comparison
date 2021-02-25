@@ -128,7 +128,12 @@ export default function Home(props) {
   return (
     <>
       <Head>
-        <title>Fee calculator for canadian crypto exchanges</title>
+        <title>Fee calculator</title>
+        <meta
+          name="description"
+          content="Find the total fees charged by exchanges to buy crypto currency or
+          sell to canadian dollars."
+        ></meta>
       </Head>
       <Page>
         <FormLayout>

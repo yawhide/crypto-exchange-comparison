@@ -7,6 +7,11 @@ export default function Home() {
     <>
       <Head>
         <title>About</title>
+        <meta
+          name="description"
+          content="Learn about our mission, where to provide feedback and how we
+          calculate the fees charged by exchanges."
+        ></meta>
       </Head>
       <Page>
         <TextContainer spacing="loose">

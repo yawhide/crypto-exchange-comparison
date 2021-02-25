@@ -173,6 +173,11 @@ export default function Home(props) {
     <>
       <Head>
         <title>Cheapest canadian crypto exchanges</title>
+        <meta
+          name="description"
+          content="Unbiased comparison of crypto exchanges usable by Canadians. Calculate
+          fees for buying and selling bitcoin and ethereum."
+        ></meta>
       </Head>
       <Page>
         <TextContainer>
