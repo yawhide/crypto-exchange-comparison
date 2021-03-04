@@ -113,7 +113,7 @@
       support: {
         responseTime: "0-1 business days",
       },
-      otc: false,
+      otc: true,
       recurringBuy: false,
     },
     shakepay: {
@@ -559,9 +559,9 @@
         EOS: 1,
         XLM: 15,
         DOGE: 10,
-        ADA: 8,
-        LINK: 0.2,
-        USDT: 3.5,
+        ADA: 3.5,
+        LINK: 0.35,
+        USDT: 12,
         DOT: 0.3,
       },
       coins: {
