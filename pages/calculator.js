@@ -14,17 +14,14 @@ import {
 import React, { useState } from "react";
 import PriceAndExchangeInfo from "../components/PriceAndExchangeInfo";
 import { DATA } from "../public/data";
-import CoingeckoPriceData from "../src/fetch-coingeckoprices";
+import PriceData from "../src/fetch-price-data";
+import { buyTotalFee, sellTotalFee } from "../lib/fee-helper";
 
-function methodTypeToExchangeInfoMapping(
-  cryptocurrency,
-  amount,
-  buySellToggleState
-) {
+function methodTypeToExchangeInfoMapping(cryptocurrency, amount, isBuy) {
   if (cryptocurrency === "") return {};
   return Object.keys(DATA).reduce((accumulator, exchangeName) => {
     const exchangeInfo = DATA[exchangeName];
-    if (buySellToggleState) {
+    if (isBuy) {
       exchangeInfo.depositMethods
         .filter((method) => amount >= method.min && amount <= method.max)
         .forEach((method) => (accumulator[method.type] = exchangeInfo));
@@ -51,15 +48,10 @@ export default function Home(props) {
     buySellToggleState
   );
 
-  const coingeckoPriceDataResponse = CoingeckoPriceData();
+  const PriceDataResponse = PriceData();
 
   let items = [];
-  if (
-    coingeckoPriceDataResponse.data &&
-    amount &&
-    methodType &&
-    cryptocurrency
-  ) {
+  if (PriceDataResponse.data && amount && methodType && cryptocurrency) {
     items = Object.keys(DATA)
       .reduce((accumulator, exchangeID) => {
         const exchangeInfo = DATA[exchangeID];
@@ -72,25 +64,33 @@ export default function Home(props) {
             );
         if (!method) return accumulator;
 
+        const fee = buySellToggleState
+          ? buyTotalFee(
+              amount,
+              cryptocurrency,
+              PriceDataResponse.data.cryptocurrencies.prices,
+              PriceDataResponse.data.networkFees,
+              method.fee,
+              exchangeInfo.tradingFee,
+              exchangeInfo.realSpread,
+              exchangeInfo.withdrawFee
+            )
+          : sellTotalFee(
+              amount,
+              exchangeInfo.tradingFee,
+              exchangeInfo.realSpread,
+              method.fee
+            );
         accumulator.push({
-          fee: (
-            method.fee(amount) +
-            exchangeInfo.tradingFee(amount) +
-            exchangeInfo.realSpread(amount) +
-            (buySellToggleState
-              ? exchangeInfo.withdrawFee[cryptocurrency] *
-                  coingeckoPriceDataResponse.data.coingeckoPrice.prices[
-                    cryptocurrency
-                  ] || 0
-              : 0)
-          ).toFixed(2),
+          rawFee: fee,
+          fee: fee.toFixed(2),
           method: methodType,
           name: exchangeInfo.name,
           url: `/exchanges/${exchangeID}`,
         });
         return accumulator;
       }, [])
-      .sort((a, b) => a.fee - b.fee);
+      .sort((a, b) => a.rawFee - b.rawFee);
   }
 
   const onAmountChange = (newAmountInput) => {
@@ -120,7 +120,7 @@ export default function Home(props) {
 
   const heading =
     items.length > 0 ? (
-      <div style={{ "margin-top": "2rem", "margin-bottom": "2rem" }}>
+      <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
         <Heading element="h5">Results (cheapest to most expensive)</Heading>
       </div>
     ) : null;

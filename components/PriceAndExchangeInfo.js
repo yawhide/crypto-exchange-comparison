@@ -2,14 +2,14 @@ import { FooterHelp, Link, SkeletonBodyText } from "@shopify/polaris";
 import * as dayjs from "dayjs";
 import * as relativeTime from "dayjs/plugin/relativeTime";
 import get from "lodash/get";
-
 import React, { useEffect, useState } from "react";
-import CoingeckoPriceData from "../src/fetch-coingeckoprices";
+
+import PriceData from "../src/fetch-price-data";
 
 dayjs.extend(relativeTime);
 
 function coingeckoFromNow(priceData) {
-  const lastUpdatedAt = get(priceData, "data.coingeckoPrice.lastUpdatedAt");
+  const lastUpdatedAt = get(priceData, "data.cryptocurrencies.lastUpdatedAt");
   if (lastUpdatedAt) {
     return dayjs(lastUpdatedAt).fromNow();
   }
@@ -17,7 +17,15 @@ function coingeckoFromNow(priceData) {
 }
 
 function ethGasFromNow(priceData) {
-  const lastUpdatedAt = get(priceData, "data.ethGasPrice.lastUpdatedAt");
+  const lastUpdatedAt = get(priceData, "data.networkFees.ETH.lastUpdatedAt");
+  if (lastUpdatedAt) {
+    return dayjs(lastUpdatedAt).fromNow();
+  }
+  return "";
+}
+
+function btcNetworkFeeFromNow(priceData) {
+  const lastUpdatedAt = get(priceData, "data.networkFees.BTC.lastUpdatedAt");
   if (lastUpdatedAt) {
     return dayjs(lastUpdatedAt).fromNow();
   }
@@ -26,11 +34,14 @@ function ethGasFromNow(priceData) {
 
 export default function PriceAndExchangeInfo() {
   const [coingeckoLastUpdatedAt, setCoingeckoLastUpdatedAt] = useState("");
-  const [ethgasLastUpdatedAt, setEthgasLastUpdatedAt] = useState("");
+  const [ethGasLastUpdatedAt, setEthGasLastUpdatedAt] = useState("");
+  const [btcNetworkFeeLastUpdatedAt, setBtcNetworkFeeLastUpdatedAt] = useState(
+    ""
+  );
 
   let footerContents = null;
 
-  const priceData = CoingeckoPriceData();
+  const priceData = PriceData();
 
   if (priceData.isLoading) {
     footerContents = <SkeletonBodyText lines={2}></SkeletonBodyText>;
@@ -44,6 +55,7 @@ export default function PriceAndExchangeInfo() {
   } else {
     const coingeckoFromNowDateString = coingeckoFromNow(priceData);
     const ethGasFromNowDateString = ethGasFromNow(priceData);
+    const btcNetworkFeeFromNowDateString = btcNetworkFeeFromNow(priceData);
     footerContents = (
       <>
         <p>
@@ -58,6 +70,12 @@ export default function PriceAndExchangeInfo() {
           </Link>{" "}
           last updated {ethGasFromNowDateString}
         </p>
+        <p>
+          <Link url="https://bitcoinfees.earn.com/" external={true}>
+            Bitcoin network fee
+          </Link>{" "}
+          last updated {btcNetworkFeeFromNowDateString}
+        </p>
         <p>Exchange information updated as of Jan 25th 2021</p>
       </>
     );
@@ -68,11 +86,15 @@ export default function PriceAndExchangeInfo() {
       const interval = setInterval(() => {
         const coingeckoFromNowDateString = coingeckoFromNow(priceData);
         const ethGasFromNowDateString = ethGasFromNow(priceData);
+        const btcNetworkFeeFromNowDateString = btcNetworkFeeFromNow(priceData);
         if (coingeckoFromNowDateString) {
           setCoingeckoLastUpdatedAt(coingeckoFromNowDateString);
         }
         if (ethGasFromNowDateString) {
-          setEthgasLastUpdatedAt(ethGasFromNowDateString);
+          setEthGasLastUpdatedAt(ethGasFromNowDateString);
+        }
+        if (btcNetworkFeeFromNowDateString) {
+          setEthGasLastUpdatedAt(btcNetworkFeeFromNowDateString);
         }
       }, 1000);
       return () => clearInterval(interval);

@@ -1,7 +1,6 @@
 import Head from "next/head";
 import {
   Card,
-  DisplayText,
   Heading,
   Layout,
   Link,
@@ -15,75 +14,33 @@ import {
 import React, { useState } from "react";
 import PriceAndExchangeInfo from "../components/PriceAndExchangeInfo";
 import { DATA } from "../public/data";
-import CoingeckoPriceData from "../src/fetch-coingeckoprices";
+import PriceData from "../src/fetch-price-data";
+import { lowestFeeMethod } from "../lib/fee-helper";
 
-function calculateFee(
-  coinPriceCache,
-  isBuy,
-  exchangeInfo,
-  method,
+function calculateLowest3DepositsAndWithdraws(
   amount,
-  coin
+  cryptocurrencyPrices,
+  networkFees
 ) {
-  return (
-    ((method.fee(amount) +
-      exchangeInfo.tradingFee(amount) +
-      exchangeInfo.realSpread(amount) +
-      (isBuy
-        ? exchangeInfo.withdrawFee[coin] * coinPriceCache[coin] || 0
-        : 0)) /
-      amount) *
-    100
-  );
-}
-
-function calculateLowestFeeMethod(
-  coinPriceCache,
-  isBuy,
-  exchangeInfo,
-  methods,
-  amount
-) {
-  return methods
-    .filter((method) => amount >= method.min && amount <= method.max)
-    .reduce((accumulator, currentMethod) => {
-      const fee = calculateFee(
-        coinPriceCache,
-        isBuy,
-        exchangeInfo,
-        currentMethod,
-        amount,
-        "BTC"
-      );
-      if (Object.keys(accumulator).length === 0 || accumulator.fee > fee) {
-        accumulator = {
-          fee: +fee.toFixed(2),
-          exchangeInfo,
-          method: currentMethod,
-        };
-      }
-      return accumulator;
-    }, {});
-}
-
-function calculateLowest3DepositsAndWithdraws(coinPriceCache, amount) {
   let deposits = [];
   let withdraws = [];
   Object.keys(DATA).forEach((exchangeID) => {
     const exchangeInfo = DATA[exchangeID];
-    const deposit = calculateLowestFeeMethod(
-      coinPriceCache,
+    const deposit = lowestFeeMethod(
       true,
+      amount,
+      "BTC",
       exchangeInfo,
-      exchangeInfo.depositMethods,
-      amount
+      cryptocurrencyPrices,
+      networkFees
     );
-    const withdraw = calculateLowestFeeMethod(
-      coinPriceCache,
+    const withdraw = lowestFeeMethod(
       false,
+      amount,
+      "BTC",
       exchangeInfo,
-      exchangeInfo.withdrawMethods,
-      amount
+      cryptocurrencyPrices,
+      networkFees
     );
     if (Object.keys(deposit).length !== 0)
       deposits.push({ ...deposit, exchangeID });
@@ -98,12 +55,9 @@ function calculateLowest3DepositsAndWithdraws(coinPriceCache, amount) {
 
 function RenderResourceList(props) {
   const { amount, isBuy } = props;
-  const coingeckoPriceDataResponse = CoingeckoPriceData();
+  const PriceDataResponse = PriceData();
 
-  if (
-    coingeckoPriceDataResponse.isLoading ||
-    coingeckoPriceDataResponse.isError
-  ) {
+  if (PriceDataResponse.isLoading || PriceDataResponse.isError) {
     return (
       <Card sectioned>
         <SkeletonBodyText lines={2} />
@@ -113,8 +67,9 @@ function RenderResourceList(props) {
   }
 
   const result = calculateLowest3DepositsAndWithdraws(
-    coingeckoPriceDataResponse.data.coingeckoPrice.prices,
-    amount
+    amount,
+    PriceDataResponse.data.cryptocurrencies.prices,
+    PriceDataResponse.data.networkFees
   );
   const rows = isBuy ? result.deposits : result.withdraws;
   const items = rows.map((row) => ({

@@ -5,6 +5,7 @@ import {
   DataTable,
   DescriptionList,
   DisplayText,
+  EmptyState,
   Icon,
   Layout,
   Link,
@@ -17,7 +18,8 @@ import React, { useState } from "react";
 import { MobileAcceptMajor, MobileCancelMajor } from "@shopify/polaris-icons";
 import { DATA } from "../../public/data";
 import PriceAndExchangeInfo from "../../components/PriceAndExchangeInfo";
-import CoingeckoPriceData from "../../src/fetch-coingeckoprices";
+import PriceData from "../../src/fetch-price-data";
+import { withdrawCryptoFee } from "../../lib/fee-helper";
 
 function methodTypeToExchangeInfoMapping(exchange, amount, isBuy) {
   if (isBuy) {
@@ -110,17 +112,20 @@ function CalculatorResult(props) {
     exchange,
     amount,
     cryptocurrency,
-    coingeckoPriceDataResponse,
+    PriceDataResponse,
     isBuy,
   } = props;
   const tradingFee = exchange.tradingFee(amount);
   const spreadFee = exchange.realSpread(amount);
-  const cryptoWithdrawalFee =
-    (exchange.withdrawFee[cryptocurrency] || 0) *
-    coingeckoPriceDataResponse.data.coingeckoPrice.prices[cryptocurrency];
   let rows, total;
 
   if (isBuy) {
+    const cryptoWithdrawalFee = withdrawCryptoFee(
+      exchange.withdrawFee,
+      cryptocurrency,
+      PriceDataResponse.data.cryptocurrencies.prices,
+      PriceDataResponse.data.networkFees
+    );
     const depositMethod = exchange.depositMethods.find(
       (method) => method.type === methodType
     );
@@ -174,17 +179,29 @@ function Calculator(props) {
   const { isBuy, exchange } = props;
   const [amount, setAmount] = useState("1000");
   const [cryptocurrency, setCryptocurrency] = useState("BTC");
-  const [methodType, setMethodType] = useState("select");
+  const [methodType, setMethodType] = useState(
+    isBuy ? exchange.depositMethods[0].type : exchange.withdrawMethods[0].type
+  );
 
-  const coingeckoPriceDataResponse = CoingeckoPriceData();
+  const PriceDataResponse = PriceData();
   let calculatorResult = null;
-  if (
-    coingeckoPriceDataResponse.isError ||
-    coingeckoPriceDataResponse.isLoading ||
-    !amount ||
-    !cryptocurrency ||
-    methodType === "select"
-  ) {
+  if (!amount || !cryptocurrency || methodType === "select") {
+    calculatorResult = (
+      <Card sectioned>
+        <EmptyState
+          heading={"Choose a withdrawal method"}
+          // action={{ content: "Add transfer" }}
+          // secondaryAction={{
+          //   content: "Learn more",
+          //   url: "https://help.shopify.com",
+          // }}
+          // image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+        >
+          {/* <p>Track and receive your incoming inventory from suppliers.</p> */}
+        </EmptyState>
+      </Card>
+    );
+  } else if (PriceDataResponse.isError || PriceDataResponse.isLoading) {
     calculatorResult = (
       <Card sectioned>
         <Card.Section>
@@ -210,7 +227,7 @@ function Calculator(props) {
         exchange={exchange}
         amount={amount}
         cryptocurrency={cryptocurrency}
-        coingeckoPriceDataResponse={coingeckoPriceDataResponse}
+        PriceDataResponse={PriceDataResponse}
         isBuy={isBuy}
       />
     );
@@ -248,7 +265,12 @@ function Exchange(props) {
 
   const calculator =
     exchange.withdrawMethods.length === 0 && buySellToggleState === false ? (
-      <Banner title="Withdrawals are not supported." status="warning"></Banner>
+      <Card>
+        <Banner
+          title="Withdrawals are not supported."
+          status="warning"
+        ></Banner>
+      </Card>
     ) : (
       <Calculator isBuy={buySellToggleState} exchange={exchange} />
     );

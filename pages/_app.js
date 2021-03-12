@@ -18,7 +18,7 @@ import {
 import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import BuySellToggle from "../components/BuySellToggle";
-import CoingeckoPriceData from "../src/fetch-coingeckoprices";
+import PriceData from "../src/fetch-price-data";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -150,7 +150,7 @@ function MyApp({ Component, pageProps }) {
   };
 
   let toast = null;
-  if (CoingeckoPriceData().isError) {
+  if (PriceData().isError) {
     toast = <Toast content="Error fetching prices" error />;
   }
 

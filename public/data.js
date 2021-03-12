@@ -1,4 +1,22 @@
 (function (exports) {
+  /*
+  eth transfer: 21000 gas
+  erc20 token transfer: 50000 gas
+  contract: 250000 gas
+  */
+  // calculation taken from: https://forum.storj.io/t/ethereum-transaction-fee-calculator/8071
+  const ETH_TRANSFER_GAS_LIMIT = 21000;
+  const ERC20_TRANSFER_GAS_LIMIT = 50000;
+  const CONTRACT_GAS_LIMIT = 250000;
+
+  function btcNetworkFee(satoshisPerByte, btcPrice) {
+    return ((satoshisPerByte * 500) / 100000000) * btcPrice;
+  }
+
+  function gasFee(rawgwei, ethPrice, gasLimit) {
+    return (rawgwei / 10) * 0.000000001 * ethPrice * gasLimit;
+  }
+
   var DATA = {
     newton: {
       id: "newton",
@@ -50,7 +68,25 @@
       ],
       tradingFee: (i) => 0,
       realSpread: (i) => 0.0059 * i,
-      withdrawFee: {},
+      withdrawFee: {
+        BTC: (cryptocurrencyPrices, networkFees) =>
+          Math.max(
+            0,
+            btcNetworkFee(
+              networkFees.BTC.halfHourFee.satoshis,
+              cryptocurrencyPrices.BTC
+            ) - 5
+          ),
+        ETH: (cryptocurrencyPrices, networkFees) =>
+          Math.max(
+            0,
+            gasFee(
+              networkFees.ETH.fast.rawgwei,
+              cryptocurrencyPrices.ETH,
+              ETH_TRANSFER_GAS_LIMIT
+            ) - 5
+          ),
+      },
       coins: {
         BTC: true,
         ETH: true,
@@ -100,8 +136,20 @@
       tradingFee: (i) => 0.001 * i + Math.max(5, i * 0.006),
       realSpread: (i) => 0,
       withdrawFee: {
-        BTC: 0.0005,
-        ETH: 0.005,
+        BTC: (cryptocurrencyPrices, networkFees) =>
+          cryptocurrencyPrices.BTC * 0.0005 +
+          gasFee(
+            networkFees.ETH.average.rawgwei,
+            cryptocurrencyPrices.ETH,
+            60000
+          ),
+        ETH: (cryptocurrencyPrices, networkFees) =>
+          cryptocurrencyPrices.ETH * 0.008 +
+          gasFee(
+            networkFees.ETH.average.rawgwei,
+            cryptocurrencyPrices.ETH,
+            60000
+          ),
       },
       coins: {
         LOTS: true,
