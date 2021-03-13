@@ -67,7 +67,7 @@
         },
       ],
       tradingFee: (i) => 0,
-      realSpread: (i) => 0.0059 * i,
+      realSpread: (i) => 0.0055 * i,
       withdrawFee: {
         BTC: (cryptocurrencyPrices, networkFees) =>
           Math.max(
@@ -201,7 +201,7 @@
         },
       ],
       tradingFee: (i) => 0,
-      realSpread: (i) => 0.0175 * i,
+      realSpread: (i) => 0.0167 * i,
       withdrawFee: {},
       coins: {
         BTC: true,
@@ -266,7 +266,7 @@
         },
       ],
       tradingFee: (i) => 0,
-      realSpread: (i) => 0.0268 * i,
+      realSpread: (i) => 0.0261 * i,
       withdrawFee: {
         BTC: 0.0003,
         ETH: 0.011,
@@ -331,7 +331,7 @@
         },
       ],
       tradingFee: (i) => 0.005 * i,
-      realSpread: (i) => 0.0294 * i,
+      realSpread: (i) => 0.025 * i,
       withdrawFee: {
         BTC: 0.0005,
         ETH: 0.02,
@@ -412,7 +412,7 @@
         },
       ],
       tradingFee: (i) => 0,
-      realSpread: (i) => 0.0207 * i,
+      realSpread: (i) => 0.0206 * i,
       withdrawFee: {},
       coins: {
         BTC: true,
@@ -464,7 +464,7 @@
         },
       ],
       tradingFee: (i, coin) => (coin === "BTC" ? 0.002 : 0.004) * i,
-      realSpread: (i) => 0.0208 * i,
+      realSpread: (i) => 0.0185 * i,
       withdrawFee: {
         BTC: 0.0005,
         ETH: 0.005,
@@ -528,7 +528,7 @@
         },
       ],
       tradingFee: (i) => 0.005 * i,
-      realSpread: (i) => 0.0111 * i,
+      realSpread: (i) => 0.009 * i,
       withdrawFee: {
         BTC: 0.00025,
         ETH: 0.01,
@@ -598,7 +598,7 @@
         },
       ],
       tradingFee: (i) => 0.002 * i,
-      realSpread: (i) => 0.0063 * i,
+      realSpread: (i) => 0.0075 * i,
       withdrawFee: {
         BTC: 0.000399,
         ETH: 0.0099,
@@ -662,9 +662,16 @@
           max: 25000,
         },
       ],
-      withdrawMethods: [],
+      withdrawMethods: [
+        {
+          type: "E-transfer",
+          fee: (i) => Math.max(1, 0.0495 * i),
+          min: 20,
+          max: 5000,
+        },
+      ],
       tradingFee: (i) => (i <= 200 ? 2 : 0),
-      realSpread: (i) => 0.0074 * i,
+      realSpread: (i) => 0.0052 * i,
       withdrawFee: {},
       coins: {
         BTC: true,
@@ -722,7 +729,7 @@
         },
       ],
       tradingFee: (i, coin) => (coin === "BTC" ? 0.002 : 0.004) * i,
-      realSpread: (i) => 0.022 * i,
+      realSpread: (i) => 0.018 * i,
       withdrawFee: {
         BTC: 0.0005,
         ETH: 0.015,
@@ -774,7 +781,7 @@
       ],
       withdrawMethods: [],
       tradingFee: (i) => 0.015 * i,
-      realSpread: (i) => 0.0078 * i,
+      realSpread: (i) => 0.0072 * i,
       withdrawFee: {
         BTC: 0.00003442,
         ETH: 0.001827,
@@ -829,7 +836,7 @@
         },
       ],
       tradingFee: (i) => 0.0021 * i,
-      realSpread: (i) => 0.003 * i,
+      realSpread: (i) => 0.0019 * i,
       withdrawFee: {
         BTC: 0.0005,
         ETH: 0.005,
@@ -877,7 +884,7 @@
         else if (i <= 250) return 4.99;
         else return 0.0149 * i;
       },
-      realSpread: (i) => 0.0145 * i,
+      realSpread: (i) => 0.0116 * i,
       withdrawFee: {},
       coins: {
         LOTS: true,
@@ -971,7 +978,7 @@
         },
       ],
       tradingFee: (i) => 0.0016 * i,
-      realSpread: (i) => 0.0148 * i,
+      realSpread: (i) => 0.0154 * i,
       withdrawFee: {
         BTC: 0.0004,
         ETH: 0.005,

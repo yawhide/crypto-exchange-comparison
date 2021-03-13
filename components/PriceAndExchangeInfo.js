@@ -49,7 +49,7 @@ export default function PriceAndExchangeInfo() {
     footerContents = (
       <>
         <p>Error trying to fetch crypto prices.</p>
-        <p>Exchange information updated as of Jan 25th 2021</p>
+        <p>Exchange information updated as of Mar 13th 2021</p>
       </>
     );
   } else {
