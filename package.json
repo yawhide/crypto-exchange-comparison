@@ -21,7 +21,7 @@
     "swr": "^0.4.1"
   },
   "devDependencies": {
-    "globby": "^11.0.2",
+    "globby": "^11.0.3",
     "prettier": "2.2.1"
   }
 }
