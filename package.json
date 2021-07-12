@@ -9,7 +9,7 @@
     "lint": "npx prettier --write ."
   },
   "dependencies": {
-    "@shopify/polaris": "^6.3.0",
+    "@shopify/polaris": "^6.6.0",
     "@shopify/polaris-icons": "^4.5.0",
     "axios": "^0.21.1",
     "coingecko-api": "^1.0.10",
